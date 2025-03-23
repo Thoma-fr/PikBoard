@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.AccountCircle
+import androidx.compose.material.icons.rounded.Email
 import androidx.compose.material.icons.rounded.Lock
 import androidx.compose.material.icons.rounded.MailOutline
 import androidx.compose.material3.Button
@@ -31,6 +32,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.pikboard.ui.Fragment.PikButton
+import com.example.pikboard.ui.Fragment.PikPasswordField
+import com.example.pikboard.ui.Fragment.PikTextField
 
 @Composable
 fun SignupScreen(paddingValues: PaddingValues, navController: NavHostController) {
@@ -52,100 +56,53 @@ fun SignupScreen(paddingValues: PaddingValues, navController: NavHostController)
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        TextField(
+        PikTextField(
             value = username,
             onValueChange = {username = it},
-            label = { Text("Username") },
-            leadingIcon = {
-                Icon( Icons.Rounded.AccountCircle,
-                    contentDescription = "")
-            },
-            shape = RoundedCornerShape(8.dp),
-            modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp, horizontal = 20.dp),
-            colors = TextFieldDefaults.colors(
-                focusedContainerColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent
-            )
+            hint = "Username",
+            leadingIcon = Icons.Rounded.AccountCircle
         )
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        TextField(
+        PikTextField(
             value = email,
             onValueChange = {email = it},
-            label = { Text("Email") },
-            leadingIcon = {
-                Icon( Icons.Rounded.MailOutline,
-                    contentDescription = "")
-            },
-            shape = RoundedCornerShape(8.dp),
-            modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp, horizontal = 20.dp),
-            colors = TextFieldDefaults.colors(
-                focusedContainerColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent
-            )
+            hint = "Email",
+            leadingIcon = Icons.Rounded.Email
         )
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        TextField(
+        PikPasswordField(
             value = password,
             onValueChange = {password = it},
-            label = {Text(text = "Password")},
-            leadingIcon = {
-                Icon( Icons.Rounded.Lock, contentDescription = "")
-            },
-
-            shape = RoundedCornerShape(8.dp),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 4.dp, horizontal = 20.dp),
-            colors = TextFieldDefaults.colors(
-                focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent
-            )
+            hint = passwordError.ifEmpty { "Password" },
+            color = if (passwordError.isNotEmpty()) Color.Red else Color.Unspecified,
         )
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        TextField(
+        PikPasswordField(
             value = confPassword,
             onValueChange = {confPassword = it},
-            label = { Text(text = "Confirm Password")},
-            leadingIcon = {
-                Icon( Icons.Rounded.Lock, contentDescription = "")
-            },
-
-            shape = RoundedCornerShape(8.dp),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 4.dp, horizontal = 20.dp),
-            colors = TextFieldDefaults.colors(
-                focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent
-            )
+            hint = "Confirm password"
         )
 
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
-        Button(
-            onClick = {
-                if (username.isNotEmpty() &&
-                    email.isNotEmpty() &&
-                    password.isNotEmpty() &&
-                    confPassword.isNotEmpty() &&
-                    confPassword == password
-                    ) {
-                    // TODO: Handle api call to Signup
-                }
-            },
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 90.dp)
-        ) { Text(text = "Signup") }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Spacer( modifier = Modifier.height(50.dp))
-
+        PikButton("Signup") {
+            if (username.isNotEmpty() &&
+                email.isNotEmpty() &&
+                password.isNotEmpty() &&
+                confPassword.isNotEmpty() &&
+                confPassword == password
+            ) {
+                // TODO: Handle api call to Signup
+            } else {
+                // TODO: IDK, show the error
+            }
+        }
     }
 }
 

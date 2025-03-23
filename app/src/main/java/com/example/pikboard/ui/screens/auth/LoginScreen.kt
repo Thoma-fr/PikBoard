@@ -16,7 +16,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.AccountCircle
 import androidx.compose.material.icons.rounded.Lock
-import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -40,6 +39,9 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.pikboard.R
+import com.example.pikboard.ui.Fragment.PikButton
+import com.example.pikboard.ui.Fragment.PikPasswordField
+import com.example.pikboard.ui.Fragment.PikTextField
 import com.example.pikboard.ui.screens.Routes
 
 @Composable
@@ -69,65 +71,33 @@ fun LoginScreen(paddingValues: PaddingValues, navController: NavHostController) 
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        TextField(
+        PikTextField(
             value = email,
             onValueChange = {email = it},
-            label = {Text(emailError.ifEmpty { "Email" }, color = if (emailError.isNotEmpty()) Color.Red else Color.Unspecified)},
-            leadingIcon = {
-                Icon( Icons.Rounded.AccountCircle,
-                    contentDescription = "")
-            },
-            shape = RoundedCornerShape(8.dp),
-            modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp, horizontal = 20.dp),
-            colors = TextFieldDefaults.colors(
-                focusedContainerColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent
-            )
+            hint = emailError.ifEmpty { "Email" } ,
+            color = if (emailError.isNotEmpty()) Color.Red else Color.Unspecified,
+            leadingIcon = Icons.Rounded.AccountCircle
         )
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        TextField(
+        PikPasswordField(
             value = password,
             onValueChange = {password = it},
-            label = {Text(passwordError.ifEmpty { "Password" }, color = if(passwordError.isNotEmpty())Color.Red else Color.Unspecified)},
-            leadingIcon = {
-                Icon( Icons.Rounded.Lock, contentDescription = "")
-            },
-            visualTransformation = if (passwordVisibility) VisualTransformation.None else PasswordVisualTransformation(),
-            trailingIcon = {
-                val image = if (passwordVisibility)
-                    painterResource(id = R.drawable.visibility_24px)
-                else painterResource(id = R.drawable.visibility_off_24px)
-
-                Icon(
-                    painter = image,
-                    contentDescription = "",
-                    modifier = Modifier.size(24.dp).clickable { passwordVisibility = !passwordVisibility }
-                )
-            },
-
-            shape = RoundedCornerShape(8.dp),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 4.dp, horizontal = 20.dp),
-            colors = TextFieldDefaults.colors(
-                focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent
-            )
+            hint = passwordError.ifEmpty { "Password" },
+            color = if (passwordError.isNotEmpty()) Color.Red else Color.Unspecified,
         )
+
         Spacer(modifier = Modifier.height(24.dp))
 
-        Button(
-            onClick = {
-                emailError = if (email.isBlank()) "Email is required" else ""
-                passwordError = if (password.isBlank()) "Password is required" else ""
-                if (emailError.isEmpty() && passwordError.isEmpty()) {
-                    // TODO: Handle api call to login
-                }
-            },
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 90.dp)
-        ) { Text(text = "Login") }
+        PikButton("Login") {
+            emailError = if (email.isBlank()) "Email is required" else ""
+            passwordError = if (password.isBlank()) "Password is required" else ""
+            if (emailError.isEmpty() && passwordError.isEmpty()) {
+                // TODO: Handle api call to login
+            }
+
+        }
 
         Spacer(modifier = Modifier.height(16.dp))
 
