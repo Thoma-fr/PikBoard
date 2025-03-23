@@ -27,7 +27,7 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     fun PikBoardApp() {
-        var navController = rememberNavController()
+        val navController = rememberNavController()
         NavHost(navController = navController, startDestination = Routes.LOGIN_PAGE){
             composable(Routes.LOGIN_PAGE) {
                 LoginScreen()
