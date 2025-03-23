@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.pikboard.ui.screens.HomeScreen
 import com.example.pikboard.ui.screens.auth.LoginScreen
 import com.example.pikboard.ui.screens.Routes
 import com.example.pikboard.ui.screens.auth.SignupScreen
@@ -34,13 +35,17 @@ class MainActivity : ComponentActivity() {
     @Composable
     fun PikBoardApp(innerPadding: PaddingValues) {
         val navController = rememberNavController()
-        NavHost(navController = navController, startDestination = Routes.Auth.LOGIN_PAGE){
+        NavHost(navController = navController, startDestination = Routes.HOME_PAGE){
             composable(Routes.Auth.LOGIN_PAGE) {
                 LoginScreen(innerPadding, navController)
             }
 
             composable(Routes.Auth.SIGNUP_PAGE) {
                 SignupScreen(innerPadding, navController)
+            }
+
+            composable(Routes.HOME_PAGE) {
+                HomeScreen(innerPadding, navController)
             }
         }
     }
