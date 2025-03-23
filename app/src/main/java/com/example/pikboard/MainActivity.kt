@@ -40,7 +40,7 @@ class MainActivity : ComponentActivity() {
             }
 
             composable(Routes.SIGNUP_PAGE) {
-                SignupScreen()
+                SignupScreen(innerPadding)
             }
         }
     }
