@@ -1,0 +1,45 @@
+package com.example.pikboard.ui.Fragment
+
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.height
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import com.example.pikboard.R
+
+@Composable
+fun DisplayTiles( names: List<String> = listOf("mario", "isaac","monsterhunter"))
+{
+    Column()
+    {
+        for (name in names) {
+            Tile(name)
+
+        }
+    }
+
+}
+@Composable
+fun Tile(name: String)
+{
+    Column()
+    {
+        Text(text = "Adversaire ".plus(name))
+        Image(
+
+            painter = painterResource(id = R.drawable.phchess),
+            contentDescription = "",
+            modifier = Modifier.height(150.dp)
+        )
+        Text(text = "Votre tour")
+    }
+}
+@Preview(showBackground = true)
+@Composable
+fun DisplayTilesPreview() {
+    DisplayTiles()
+}

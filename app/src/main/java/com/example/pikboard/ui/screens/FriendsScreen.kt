@@ -11,61 +11,61 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.AccountCircle
+import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.fontResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.pikboard.R
+import com.example.pikboard.ui.Fragment.FriendTile
 import com.example.pikboard.ui.Fragment.PikButton
 import com.example.pikboard.ui.Fragment.PikHeader
+import com.example.pikboard.ui.Fragment.PikTextField
 import com.example.pikboard.ui.Fragment.Tile
 
 @Composable
-fun HomeScreen(navController: NavHostController) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        PikHeader(modifier = Modifier.align(Alignment.Start))
+fun FriendsScreen() {
+    PikHeader()
+    var searchQuery by remember { mutableStateOf("") }
 
-        Spacer(modifier = Modifier.height(16.dp))
+    Column {
+        PikHeader()
 
-        PikButton("New Game") { /* Action */ }
+        PikTextField(
+            value = searchQuery,
+            onValueChange = { searchQuery = it },
+            hint = "Search...",
+            color = Color.Unspecified,
+            leadingIcon = Icons.Rounded.Search
+        )
+        Friends()
+        PikButton(text="Add Friends") {  }
+    }
+}
+@Composable
+fun Friends(names: List<String> = listOf("mario", "isaac","monsterhunter","bruh","starbound","Undertale"))
+{
+    for (name in names) {
+        FriendTile(name)
 
-        Spacer(modifier = Modifier.height(8.dp))
-
-        HorizontalDivider(color = Color.Black)
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Text(text = "Continue game")
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(2),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-
-        ) {
-            items(7) { _ ->
-
-                Tile(name = "isaac")
-
-            }
-        }
     }
 }
 @Preview(showBackground = true)
 @Composable
-fun HomeScreenPreview() {
-    HomeScreen( rememberNavController())
+fun FriendScreenPreview() {
+    FriendsScreen()
 }
