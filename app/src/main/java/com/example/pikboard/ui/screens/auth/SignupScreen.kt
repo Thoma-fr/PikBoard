@@ -1,23 +1,13 @@
 package com.example.pikboard.ui.screens.auth
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.AccountCircle
 import androidx.compose.material.icons.rounded.Email
-import androidx.compose.material.icons.rounded.Lock
-import androidx.compose.material.icons.rounded.MailOutline
-import androidx.compose.material3.Button
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -37,7 +27,7 @@ import com.example.pikboard.ui.Fragment.PikPasswordField
 import com.example.pikboard.ui.Fragment.PikTextField
 
 @Composable
-fun SignupScreen(navController: NavHostController) {
+fun SignupScreen(navController: NavHostController ) {
     var username by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
