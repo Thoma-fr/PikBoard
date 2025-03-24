@@ -7,4 +7,7 @@ object Routes {
     }
 
     const val HOME_PAGE = "HOME_PAGE"
+    const val PROFILE_PAGE = "PROFILE_PAGE"
+    const val NEW_GAME_PAGE = "NEW_PAGE_PAGE"
+    const val FRIENDS_PAGE = "FRIENDS_PAGE"
 }

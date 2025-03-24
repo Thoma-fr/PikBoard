@@ -45,7 +45,7 @@ import com.example.pikboard.ui.Fragment.PikTextField
 import com.example.pikboard.ui.screens.Routes
 
 @Composable
-fun LoginScreen(paddingValues: PaddingValues, navController: NavHostController) {
+fun LoginScreen(navController: NavHostController) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
@@ -53,8 +53,7 @@ fun LoginScreen(paddingValues: PaddingValues, navController: NavHostController) 
     var passwordError by remember { mutableStateOf("") }
 
     Column (modifier = Modifier
-        .fillMaxSize()
-        .padding(paddingValues),
+        .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
@@ -128,5 +127,5 @@ fun LoginScreen(paddingValues: PaddingValues, navController: NavHostController) 
 @Preview(showBackground = true)
 @Composable
 fun LoginScreenPreview() {
-    LoginScreen(PaddingValues(), rememberNavController())
+    LoginScreen(rememberNavController())
 }
