@@ -48,7 +48,6 @@ import com.example.pikboard.ui.screens.Routes
 fun LoginScreen(paddingValues: PaddingValues, navController: NavHostController) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    var passwordVisibility by remember { mutableStateOf(false) }
 
     var emailError by remember { mutableStateOf("") }
     var passwordError by remember { mutableStateOf("") }
@@ -95,6 +94,7 @@ fun LoginScreen(paddingValues: PaddingValues, navController: NavHostController) 
             passwordError = if (password.isBlank()) "Password is required" else ""
             if (emailError.isEmpty() && passwordError.isEmpty()) {
                 // TODO: Handle api call to login
+                navController.navigate(Routes.HOME_PAGE)
             }
 
         }
