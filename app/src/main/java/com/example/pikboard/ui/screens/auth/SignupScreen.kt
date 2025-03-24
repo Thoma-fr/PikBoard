@@ -37,7 +37,7 @@ import com.example.pikboard.ui.Fragment.PikPasswordField
 import com.example.pikboard.ui.Fragment.PikTextField
 
 @Composable
-fun SignupScreen(paddingValues: PaddingValues, navController: NavHostController) {
+fun SignupScreen(navController: NavHostController) {
     var username by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -46,8 +46,7 @@ fun SignupScreen(paddingValues: PaddingValues, navController: NavHostController)
     var passwordError by remember { mutableStateOf("") }
 
     Column (modifier = Modifier
-        .fillMaxSize()
-        .padding(paddingValues),
+        .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
@@ -109,5 +108,5 @@ fun SignupScreen(paddingValues: PaddingValues, navController: NavHostController)
 @Preview(showBackground = true)
 @Composable
 fun SignupScreenPreview() {
-    SignupScreen(PaddingValues(), rememberNavController())
+    SignupScreen(rememberNavController())
 }

@@ -27,12 +27,11 @@ import com.example.pikboard.ui.Fragment.PikButton
 import com.example.pikboard.ui.Fragment.PikHeader
 
 @Composable
-fun HomeScreen(paddingValues: PaddingValues, navController: NavHostController) {
+fun HomeScreen(navController: NavHostController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
-            .padding(paddingValues),
+            .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         PikHeader(modifier = Modifier.align(Alignment.Start))
@@ -66,12 +65,10 @@ fun HomeScreen(paddingValues: PaddingValues, navController: NavHostController) {
                 )
             }
         }
-        // TODO:
-        // [ ] Ajouter une barre de navigation
     }
 }
 @Preview(showBackground = true)
 @Composable
 fun HomeScreenPreview() {
-    HomeScreen(PaddingValues(), rememberNavController())
+    HomeScreen( rememberNavController())
 }
