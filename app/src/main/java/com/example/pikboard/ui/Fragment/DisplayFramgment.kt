@@ -16,9 +16,7 @@ import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -29,6 +27,9 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
+import com.example.pikboard.ui.screens.Routes
 
 @Composable
 fun PikHeader(modifier: Modifier = Modifier) {
@@ -51,24 +52,27 @@ data class BottomNavigationItem(
     val title: String,
     val selectedIcon: ImageVector,
     val unselectedIcon: ImageVector,
+    val route: String,
     val hasNews: Boolean,
     val badgeCount: Int? = null
 )
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun PikNavBar() {
+fun PikNavBar(navController: NavHostController) {
     val items = listOf(
         BottomNavigationItem(
             title = "Home",
             selectedIcon = Icons.Filled.Home,
             unselectedIcon = Icons.Outlined.Home,
             hasNews = false,
+            route = Routes.HOME_PAGE
         ),
         BottomNavigationItem(
             title = "Plus",
             selectedIcon = Icons.Filled.Add,
             unselectedIcon = Icons.Outlined.Add,
             hasNews = false,
+            route = Routes.NEW_GAME_PAGE
         ),
         // TODO: Ajouter plus d'icone (pour pouvoir avoir un icon "groupe")
         BottomNavigationItem(
@@ -76,12 +80,14 @@ fun PikNavBar() {
             selectedIcon = Icons.Filled.Share,
             unselectedIcon = Icons.Outlined.Share,
             hasNews = false,
+            route = Routes.FRIENDS_PAGE
         ),
         BottomNavigationItem(
             title = "Profile",
             selectedIcon = Icons.Filled.Person,
             unselectedIcon = Icons.Outlined.Person,
             hasNews = false,
+            route = Routes.PROFILE_PAGE
         ),
     )
     var selectedItemIndex by rememberSaveable { mutableStateOf(0) }
@@ -92,7 +98,7 @@ fun PikNavBar() {
                 selected = selectedItemIndex == index,
                 onClick = {
                     selectedItemIndex = index
-                    // TODO: Add the navigation here
+                    navController.navigate(item.route)
                           },
                 label = {
                     Text(text = item.title)
@@ -123,5 +129,5 @@ fun PikNavBar() {
 @Preview
 @Composable
 fun PikNavBarPreview() {
-    PikNavBar()
+    PikNavBar(rememberNavController())
 }

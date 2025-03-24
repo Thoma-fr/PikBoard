@@ -1,6 +1,7 @@
 package com.example.pikboard
 
 import android.os.Bundle
+import android.provider.ContactsContract.Profile
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -16,7 +17,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.pikboard.ui.Fragment.PikNavBar
+import com.example.pikboard.ui.screens.AddGamePage
+import com.example.pikboard.ui.screens.FriendPage
 import com.example.pikboard.ui.screens.HomeScreen
+import com.example.pikboard.ui.screens.ProfilePage
 import com.example.pikboard.ui.screens.auth.LoginScreen
 import com.example.pikboard.ui.screens.Routes
 import com.example.pikboard.ui.screens.auth.SignupScreen
@@ -45,7 +49,7 @@ class MainActivity : ComponentActivity() {
             bottomBar = {
                 if (currentRoute != Routes.Auth.LOGIN_PAGE &&
                     currentRoute != Routes.Auth.SIGNUP_PAGE) {
-                    PikNavBar()
+                    PikNavBar(navController)
                 }
 
             }
@@ -63,6 +67,15 @@ class MainActivity : ComponentActivity() {
                 }
                 composable(Routes.HOME_PAGE) {
                     HomeScreen(navController)
+                }
+                composable(Routes.NEW_GAME_PAGE) {
+                    AddGamePage()
+                }
+                composable(Routes.FRIENDS_PAGE) {
+                    FriendPage()
+                }
+                composable(Routes.PROFILE_PAGE) {
+                    ProfilePage()
                 }
             }
         }
