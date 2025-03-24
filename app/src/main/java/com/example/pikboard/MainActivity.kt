@@ -35,7 +35,7 @@ class MainActivity : ComponentActivity() {
     @Composable
     fun PikBoardApp(innerPadding: PaddingValues) {
         val navController = rememberNavController()
-        NavHost(navController = navController, startDestination = Routes.HOME_PAGE){
+        NavHost(navController = navController, startDestination = Routes.Auth.LOGIN_PAGE){
             composable(Routes.Auth.LOGIN_PAGE) {
                 LoginScreen(innerPadding, navController)
             }

@@ -95,6 +95,7 @@ fun LoginScreen(paddingValues: PaddingValues, navController: NavHostController) 
             passwordError = if (password.isBlank()) "Password is required" else ""
             if (emailError.isEmpty() && passwordError.isEmpty()) {
                 // TODO: Handle api call to login
+                navController.navigate(Routes.HOME_PAGE)
             }
 
         }
