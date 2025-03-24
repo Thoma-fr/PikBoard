@@ -48,7 +48,6 @@ import com.example.pikboard.ui.screens.Routes
 fun LoginScreen(paddingValues: PaddingValues, navController: NavHostController) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    var passwordVisibility by remember { mutableStateOf(false) }
 
     var emailError by remember { mutableStateOf("") }
     var passwordError by remember { mutableStateOf("") }
