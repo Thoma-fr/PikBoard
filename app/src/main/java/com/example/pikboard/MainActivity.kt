@@ -1,7 +1,6 @@
 package com.example.pikboard
 
 import android.os.Bundle
-import android.provider.ContactsContract.Profile
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -12,10 +11,12 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.pikboard.api.PikBoardApiViewModel
 import com.example.pikboard.ui.Fragment.PikNavBar
 import com.example.pikboard.ui.screens.AddGamePage
 import com.example.pikboard.ui.screens.FriendPage
@@ -42,6 +43,7 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     fun PikBoardApp(innerPadding: PaddingValues) {
+        val pikBoardApiViewModel = ViewModelProvider(this)[PikBoardApiViewModel::class.java]
         val navController = rememberNavController()
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route
@@ -60,10 +62,10 @@ class MainActivity : ComponentActivity() {
                 modifier = Modifier.padding(scaffoldPadding)
             ) {
                 composable(Routes.Auth.LOGIN_PAGE) {
-                    LoginScreen(navController)
+                    LoginScreen(navController, pikBoardApiViewModel)
                 }
                 composable(Routes.Auth.SIGNUP_PAGE) {
-                    SignupScreen(navController)
+                    SignupScreen(navController, pikBoardApiViewModel)
                 }
                 composable(Routes.HOME_PAGE) {
                     HomeScreen(navController)
