@@ -8,8 +8,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.AccountCircle
 import androidx.compose.material.icons.rounded.Email
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -20,20 +22,43 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.pikboard.api.NetworkResponse
+import com.example.pikboard.api.PikBoardApiViewModel
 import com.example.pikboard.ui.Fragment.PikButton
 import com.example.pikboard.ui.Fragment.PikPasswordField
 import com.example.pikboard.ui.Fragment.PikTextField
+import com.example.pikboard.ui.screens.Routes
 
 @Composable
-fun SignupScreen(navController: NavHostController ) {
+fun SignupScreen(navController: NavHostController, pikBoardApiViewModel: PikBoardApiViewModel) {
     var username by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var confPassword by remember { mutableStateOf("") }
 
     var passwordError by remember { mutableStateOf("") }
+    var apiErrorMessage by remember { mutableStateOf("") }
+    var isSignupApiCallLoading by remember { mutableStateOf(false) }
+
+    val signupResult = pikBoardApiViewModel.signupResponse.observeAsState()
+
+    when(val result = signupResult.value) {
+        is NetworkResponse.Error -> {
+            apiErrorMessage = result.message
+            isSignupApiCallLoading = false
+        }
+        NetworkResponse.Loading -> {
+            isSignupApiCallLoading = true
+        }
+        is NetworkResponse.Success -> {
+            isSignupApiCallLoading = false
+            navController.navigate(Routes.Auth.LOGIN_PAGE)
+        }
+        null -> {}
+    }
 
     Column (modifier = Modifier
         .fillMaxSize(),
@@ -78,18 +103,24 @@ fun SignupScreen(navController: NavHostController ) {
             hint = "Confirm password"
         )
 
+        if (apiErrorMessage.isNotEmpty()) {
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(text = apiErrorMessage, fontSize = 16.sp, color = Color.Red)
+        }
+
         Spacer(modifier = Modifier.height(8.dp))
 
-        PikButton("Signup") {
+        PikButton("Signup", isSignupApiCallLoading) {
             if (username.isNotEmpty() &&
                 email.isNotEmpty() &&
                 password.isNotEmpty() &&
-                confPassword.isNotEmpty() &&
-                confPassword == password
+                confPassword.isNotEmpty()
             ) {
-                // TODO: Handle api call to Signup
-            } else {
-                // TODO: IDK, show the error
+                if (confPassword == password) {
+                    pikBoardApiViewModel.signup(username, email, password)
+                } else {
+                    apiErrorMessage = "Passwords are different"
+                }
             }
         }
     }
@@ -98,5 +129,5 @@ fun SignupScreen(navController: NavHostController ) {
 @Preview(showBackground = true)
 @Composable
 fun SignupScreenPreview() {
-    SignupScreen(rememberNavController())
+    SignupScreen(rememberNavController(), PikBoardApiViewModel())
 }

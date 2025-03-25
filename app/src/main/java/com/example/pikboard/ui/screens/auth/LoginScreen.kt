@@ -58,10 +58,10 @@ fun LoginScreen(navController: NavHostController, viewModel: PikBoardApiViewMode
             isLoginApiCallLoading = true
         }
         is NetworkResponse.Success -> {
-            navController.navigate(Routes.HOME_PAGE)
             isLoginApiCallLoading = false
             // TODO: Save the token somewhere
             // result.data.data.token
+            navController.navigate(Routes.HOME_PAGE)
         }
         null -> {}
     }

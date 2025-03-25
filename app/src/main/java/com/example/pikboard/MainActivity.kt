@@ -65,7 +65,7 @@ class MainActivity : ComponentActivity() {
                     LoginScreen(navController, pikBoardApiViewModel)
                 }
                 composable(Routes.Auth.SIGNUP_PAGE) {
-                    SignupScreen(navController)
+                    SignupScreen(navController, pikBoardApiViewModel)
                 }
                 composable(Routes.HOME_PAGE) {
                     HomeScreen(navController)
