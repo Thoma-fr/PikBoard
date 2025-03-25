@@ -54,12 +54,9 @@ fun HomeScreen(navController: NavHostController) {
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
             verticalArrangement = Arrangement.spacedBy(16.dp),
-
         ) {
             items(7) { _ ->
-
                 Tile(name = "isaac")
-
             }
         }
     }

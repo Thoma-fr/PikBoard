@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -12,25 +13,14 @@ import androidx.compose.ui.unit.dp
 import com.example.pikboard.R
 
 @Composable
-fun DisplayTiles( names: List<String> = listOf("mario", "isaac","monsterhunter"))
-{
-    Column()
-    {
-        for (name in names) {
-            Tile(name)
-
-        }
-    }
-
-}
-@Composable
 fun Tile(name: String)
 {
-    Column()
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally
+    )
     {
         Text(text = "Adversaire ".plus(name))
         Image(
-
             painter = painterResource(id = R.drawable.phchess),
             contentDescription = "",
             modifier = Modifier.height(150.dp)
@@ -41,5 +31,5 @@ fun Tile(name: String)
 @Preview(showBackground = true)
 @Composable
 fun DisplayTilesPreview() {
-    DisplayTiles()
+    Tile(name = "toto")
 }
