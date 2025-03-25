@@ -19,13 +19,17 @@ fun Tile(name: String)
         horizontalAlignment = Alignment.CenterHorizontally
     )
     {
-        Text(text = "Adversaire ".plus(name))
-        Image(
-            painter = painterResource(id = R.drawable.phchess),
-            contentDescription = "",
-            modifier = Modifier.height(150.dp)
-        )
-        Text(text = "Votre tour")
+        Column(
+            horizontalAlignment = Alignment.Start
+        ) {
+            Text(text = "Adversaire ".plus(name))
+            Image(
+                painter = painterResource(id = R.drawable.phchess),
+                contentDescription = "",
+                modifier = Modifier.height(150.dp)
+            )
+            Text(text = "Votre tour")
+        }
     }
 }
 @Preview(showBackground = true)
