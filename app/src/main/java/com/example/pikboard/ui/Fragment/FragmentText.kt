@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Create
@@ -18,6 +19,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
@@ -45,7 +47,7 @@ fun PikTextField(
             Icon(leadingIcon, contentDescription = "")
         },
         shape = RoundedCornerShape(8.dp),
-        modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp, horizontal = 20.dp),
+        modifier = Modifier.width(360.dp),
         colors = TextFieldDefaults.colors(
             focusedContainerColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent
@@ -91,9 +93,7 @@ fun PikPasswordField(
         )
     },
     shape = RoundedCornerShape(8.dp),
-    modifier = Modifier
-        .fillMaxWidth()
-        .padding(vertical = 4.dp, horizontal = 20.dp),
+    modifier = Modifier.width(360.dp),
     colors = TextFieldDefaults.colors(
         focusedIndicatorColor = Color.Transparent,
         unfocusedIndicatorColor = Color.Transparent

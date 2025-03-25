@@ -39,29 +39,40 @@ import com.example.pikboard.ui.Fragment.Tile
 
 @Composable
 fun FriendsScreen() {
-    PikHeader()
     var searchQuery by remember { mutableStateOf("") }
 
-    Column {
+    Column (
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        horizontalAlignment = Alignment.Start
+    ){
         PikHeader()
+
+        Spacer(modifier = Modifier.height(16.dp))
 
         PikTextField(
             value = searchQuery,
             onValueChange = { searchQuery = it },
             hint = "Search...",
-            color = Color.Unspecified,
             leadingIcon = Icons.Rounded.Search
         )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
         Friends()
+
+        Spacer(modifier = Modifier.height(16.dp))
+
         PikButton(text="Add Friends") {  }
     }
 }
 @Composable
-fun Friends(names: List<String> = listOf("mario", "isaac","monsterhunter","bruh","starbound","Undertale"))
+fun Friends()
 {
+    val names = listOf("mario", "isaac","monsterhunter","bruh","starbound","Undertale")
     for (name in names) {
         FriendTile(name)
-
     }
 }
 @Preview(showBackground = true)

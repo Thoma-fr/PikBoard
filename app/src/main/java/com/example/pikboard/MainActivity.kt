@@ -19,7 +19,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.pikboard.api.PikBoardApiViewModel
 import com.example.pikboard.ui.Fragment.PikNavBar
 import com.example.pikboard.ui.screens.AddGamePage
-import com.example.pikboard.ui.screens.FriendPage
+import com.example.pikboard.ui.screens.FriendsScreen
 import com.example.pikboard.ui.screens.HomeScreen
 import com.example.pikboard.ui.screens.ProfilePage
 import com.example.pikboard.ui.screens.auth.LoginScreen
@@ -74,7 +74,7 @@ class MainActivity : ComponentActivity() {
                     AddGamePage()
                 }
                 composable(Routes.FRIENDS_PAGE) {
-                    FriendPage()
+                    FriendsScreen()
                 }
                 composable(Routes.PROFILE_PAGE) {
                     ProfilePage()
