@@ -1,6 +1,7 @@
 package com.example.pikboard.ui.Fragment
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Text
@@ -13,10 +14,11 @@ import androidx.compose.ui.unit.dp
 import com.example.pikboard.R
 
 @Composable
-fun Tile(name: String)
+fun Tile(name: String, onClick: () -> Unit)
 {
     Column(
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.clickable { onClick() }
     )
     {
         Column(
@@ -26,7 +28,7 @@ fun Tile(name: String)
             Image(
                 painter = painterResource(id = R.drawable.phchess),
                 contentDescription = "",
-                modifier = Modifier.height(150.dp)
+                modifier = Modifier.height(150.dp),
             )
             Text(text = "Votre tour")
         }
@@ -35,5 +37,5 @@ fun Tile(name: String)
 @Preview(showBackground = true)
 @Composable
 fun DisplayTilesPreview() {
-    Tile(name = "toto")
+    Tile(name = "toto", {})
 }

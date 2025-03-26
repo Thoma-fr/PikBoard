@@ -72,7 +72,7 @@ fun PikNavBar(navController: NavHostController) {
             selectedIcon = Icons.Filled.Add,
             unselectedIcon = Icons.Outlined.Add,
             hasNews = false,
-            route = Routes.NEW_GAME_PAGE
+            route = Routes.Game.NEW
         ),
         // TODO: Ajouter plus d'icone (pour pouvoir avoir un icon "groupe")
         BottomNavigationItem(

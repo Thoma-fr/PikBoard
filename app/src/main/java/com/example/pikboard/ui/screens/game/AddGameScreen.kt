@@ -1,4 +1,4 @@
-package com.example.pikboard.ui.screens
+package com.example.pikboard.ui.screens.game
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,6 +17,6 @@ fun AddGamePage() {
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(text = "This is the firstGame page")
+        Text("This tis the new game screen")
     }
 }
