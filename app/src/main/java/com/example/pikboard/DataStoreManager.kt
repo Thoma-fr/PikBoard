@@ -2,27 +2,28 @@ package com.example.pikboard
 
 import android.content.Context
 import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.stringPreferencesKey
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import java.util.prefs.Preferences
 
-val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
+val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "user")
 
 object PreferencesKeys {
-    val DARK_MODE = booleanPreferencesKey("dark_mode")
+    val USER_SESSION_TOKEN = stringPreferencesKey("session_key")
 }
 
-suspend fun saveDarkMode(context: Context, enabled: Boolean) {
+suspend fun saveSessionToken(context: Context, token: String) {
     context.dataStore.edit { preferences ->
-        preferences[PreferencesKeys.DARK_MODE] = enabled
+        preferences[PreferencesKeys.USER_SESSION_TOKEN] = token
     }
 }
 
-fun readDarkMode(context: Context): Flow<Any> {
+fun readSessionToken(context: Context): Flow<Any> {
     return context.dataStore.data
         .map { preferences ->
-            preferences[PreferencesKeys.DARK_MODE] ?: false
+            preferences[PreferencesKeys.USER_SESSION_TOKEN] ?: ""
         }
 }
