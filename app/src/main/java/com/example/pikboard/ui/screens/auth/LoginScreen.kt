@@ -17,10 +17,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -31,13 +33,17 @@ import androidx.navigation.compose.rememberNavController
 import com.example.pikboard.api.PikBoardApiViewModel
 import com.example.pikboard.R
 import com.example.pikboard.api.NetworkResponse
+import com.example.pikboard.store.saveSessionToken
 import com.example.pikboard.ui.Fragment.PikButton
 import com.example.pikboard.ui.Fragment.PikPasswordField
 import com.example.pikboard.ui.Fragment.PikTextField
 import com.example.pikboard.ui.screens.Routes
+import kotlinx.coroutines.launch
 
 @Composable
 fun LoginScreen(navController: NavHostController, viewModel: PikBoardApiViewModel) {
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
 
     // INFO: For read app set email = "" and password = ""
     var email by remember { mutableStateOf("user@mail.com") }
@@ -51,6 +57,7 @@ fun LoginScreen(navController: NavHostController, viewModel: PikBoardApiViewMode
 
     val loginResult = viewModel.loginResponse.observeAsState()
 
+
     when(val result = loginResult.value) {
         is NetworkResponse.Error -> {
             errorMessage = "Email or Password incorrect"
@@ -61,7 +68,10 @@ fun LoginScreen(navController: NavHostController, viewModel: PikBoardApiViewMode
         }
         is NetworkResponse.Success -> {
             isLoginApiCallLoading = false
-            // TODO: Save the token somewhere
+            scope.launch {
+                saveSessionToken(context, result.data.data.token)
+            }
+
             // result.data.data.token
             navController.navigate(Routes.HOME_PAGE)
         }
