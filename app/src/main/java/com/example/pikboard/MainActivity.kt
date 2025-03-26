@@ -22,7 +22,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.room.Room
 import com.example.pikboard.api.PikBoardApiViewModel
+import com.example.pikboard.store.UserDatabase
 import com.example.pikboard.ui.Fragment.PikNavBar
 import com.example.pikboard.ui.screens.game.AddGamePage
 import com.example.pikboard.ui.screens.FriendsScreen
@@ -55,6 +57,12 @@ class MainActivity : ComponentActivity() {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route
 
+        val db = Room.databaseBuilder(
+            applicationContext,
+            UserDatabase::class.java, "database-name"
+        ).build()
+        val userDao = db.userDao()
+
         Scaffold(
             bottomBar = {
                 if (currentRoute != Routes.Auth.LOGIN_PAGE &&
@@ -76,13 +84,13 @@ class MainActivity : ComponentActivity() {
                     SignupScreen(navController, pikBoardApiViewModel)
                 }
                 composable(Routes.HOME_PAGE) {
-                    HomeScreen(navController)
+                    HomeScreen(navController, userDao)
                 }
                 composable(Routes.FRIENDS_PAGE) {
                     FriendsScreen()
                 }
                 composable(Routes.PROFILE_PAGE) {
-                    ProfilePage()
+                    ProfilePage(userDao)
                 }
                 composable(Routes.Game.NEW) {
                     AddGamePage()

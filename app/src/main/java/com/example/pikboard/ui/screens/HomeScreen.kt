@@ -11,19 +11,35 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.pikboard.store.User
+import com.example.pikboard.store.UserDao
 import com.example.pikboard.ui.Fragment.PikButton
 import com.example.pikboard.ui.Fragment.PikHeader
 import com.example.pikboard.ui.Fragment.Tile
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.plus
 
 @Composable
-fun HomeScreen(navController: NavHostController) {
+fun HomeScreen(navController: NavHostController, userDao: UserDao) {
+
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+
+    val user: User = User(0, "testuser", "testemail", "063554", "no-image")
+
+//    scope.launch {
+//        userDao.insertUser(user)
+//    }
 
     Column(
         modifier = Modifier
@@ -59,8 +75,8 @@ fun HomeScreen(navController: NavHostController) {
         }
     }
 }
-@Preview(showBackground = true)
-@Composable
-fun HomeScreenPreview() {
-    HomeScreen( rememberNavController())
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun HomeScreenPreview() {
+//    HomeScreen( rememberNavController(), ())
+//}
