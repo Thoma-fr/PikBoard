@@ -38,8 +38,10 @@ import com.example.pikboard.ui.screens.Routes
 
 @Composable
 fun LoginScreen(navController: NavHostController, viewModel: PikBoardApiViewModel) {
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
+
+    // INFO: For read app set email = "" and password = ""
+    var email by remember { mutableStateOf("user@mail.com") }
+    var password by remember { mutableStateOf("password123") }
 
     var emailError by remember { mutableStateOf("") }
     var passwordError by remember { mutableStateOf("") }

@@ -18,8 +18,9 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.pikboard.api.PikBoardApiViewModel
 import com.example.pikboard.ui.Fragment.PikNavBar
-import com.example.pikboard.ui.screens.AddGamePage
+import com.example.pikboard.ui.screens.game.AddGamePage
 import com.example.pikboard.ui.screens.FriendsScreen
+import com.example.pikboard.ui.screens.game.GameScreen
 import com.example.pikboard.ui.screens.HomeScreen
 import com.example.pikboard.ui.screens.ProfilePage
 import com.example.pikboard.ui.screens.auth.LoginScreen
@@ -70,14 +71,17 @@ class MainActivity : ComponentActivity() {
                 composable(Routes.HOME_PAGE) {
                     HomeScreen(navController)
                 }
-                composable(Routes.NEW_GAME_PAGE) {
-                    AddGamePage()
-                }
                 composable(Routes.FRIENDS_PAGE) {
                     FriendsScreen()
                 }
                 composable(Routes.PROFILE_PAGE) {
                     ProfilePage()
+                }
+                composable(Routes.Game.NEW) {
+                    AddGamePage()
+                }
+                composable(Routes.Game.CHESS){
+                    GameScreen()
                 }
             }
         }

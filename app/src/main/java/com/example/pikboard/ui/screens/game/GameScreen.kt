@@ -1,4 +1,4 @@
-package com.example.pikboard.ui.screens
+package com.example.pikboard.ui.screens.game
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.Column
@@ -24,7 +24,7 @@ import com.example.pikboard.chess.ChessRules
 import com.example.pikboard.chess.parseFEN
 
 @Composable
-fun AddGamePage() {
+fun GameScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -32,21 +32,19 @@ fun AddGamePage() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         var fenPosition by remember {
-            mutableStateOf("rnbqkbnr/pppppppp/3K4/8/8/8/PPPPPPPP/RNBQ1BNR w - - 0 1")
+            mutableStateOf("8/7P/8/2K5/4k3/8/8/8 w - - 0 1")
         }
 
         val playerIsWhite = true
         val context = LocalContext.current
         val isWhiteTurn = fenPosition.split(" ")[1] == "w"
 
-        // Vérifier l'échec et l'échec et mat
         val pieces = remember(fenPosition) { parseFEN(fenPosition) }
         val gameState = remember(fenPosition) { ChessGameState.fromFEN(fenPosition) }
         val isInCheck = remember(fenPosition) { ChessRules.isInCheck(pieces, isWhiteTurn) }
         val isCheckmate = remember(fenPosition) { ChessRules.isCheckmate(pieces, isWhiteTurn, gameState) }
 
         Column(
-            //modifier = modifier,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
@@ -55,7 +53,6 @@ fun AddGamePage() {
                 modifier = Modifier.padding(vertical = 8.dp)
             )
 
-            // Afficher l'état d'échec ou d'échec et mat
             if (isInCheck || isCheckmate) {
                 Text(
                     text = if (isCheckmate) {
