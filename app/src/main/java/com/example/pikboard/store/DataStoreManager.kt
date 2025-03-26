@@ -1,4 +1,4 @@
-package com.example.pikboard
+package com.example.pikboard.store
 
 import android.content.Context
 import androidx.datastore.core.DataStore

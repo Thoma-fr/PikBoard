@@ -1,6 +1,5 @@
 package com.example.pikboard.ui.screens.auth
 
-import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -29,21 +28,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.datastore.core.DataStore
-import androidx.datastore.dataStore
-import androidx.datastore.preferences.preferencesDataStore
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.pikboard.api.PikBoardApiViewModel
 import com.example.pikboard.R
 import com.example.pikboard.api.NetworkResponse
-import com.example.pikboard.saveSessionToken
+import com.example.pikboard.store.saveSessionToken
 import com.example.pikboard.ui.Fragment.PikButton
 import com.example.pikboard.ui.Fragment.PikPasswordField
 import com.example.pikboard.ui.Fragment.PikTextField
 import com.example.pikboard.ui.screens.Routes
 import kotlinx.coroutines.launch
-import java.util.prefs.Preferences
 
 @Composable
 fun LoginScreen(navController: NavHostController, viewModel: PikBoardApiViewModel) {
@@ -76,7 +71,7 @@ fun LoginScreen(navController: NavHostController, viewModel: PikBoardApiViewMode
             scope.launch {
                 saveSessionToken(context, result.data.data.token)
             }
-            
+
             // result.data.data.token
             navController.navigate(Routes.HOME_PAGE)
         }
