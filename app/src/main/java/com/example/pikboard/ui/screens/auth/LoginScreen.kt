@@ -26,6 +26,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.preferencesDataStore
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.pikboard.api.PikBoardApiViewModel
@@ -35,6 +37,7 @@ import com.example.pikboard.ui.Fragment.PikButton
 import com.example.pikboard.ui.Fragment.PikPasswordField
 import com.example.pikboard.ui.Fragment.PikTextField
 import com.example.pikboard.ui.screens.Routes
+import java.util.prefs.Preferences
 
 @Composable
 fun LoginScreen(navController: NavHostController, viewModel: PikBoardApiViewModel) {
@@ -50,6 +53,7 @@ fun LoginScreen(navController: NavHostController, viewModel: PikBoardApiViewMode
     var isLoginApiCallLoading by remember { mutableStateOf(false) }
 
     val loginResult = viewModel.loginResponse.observeAsState()
+
 
     when(val result = loginResult.value) {
         is NetworkResponse.Error -> {
