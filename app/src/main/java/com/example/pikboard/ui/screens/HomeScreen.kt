@@ -21,8 +21,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.example.pikboard.store.User
-import com.example.pikboard.store.UserDao
 import com.example.pikboard.ui.Fragment.PikButton
 import com.example.pikboard.ui.Fragment.PikHeader
 import com.example.pikboard.ui.Fragment.Tile
@@ -30,17 +28,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.plus
 
 @Composable
-fun HomeScreen(navController: NavHostController, userDao: UserDao) {
-
-    val context = LocalContext.current
-    val scope = rememberCoroutineScope()
-
-    val user: User = User(0, "testuser", "testemail", "063554", "no-image")
-
-//    scope.launch {
-//        userDao.insertUser(user)
-//    }
-
+fun HomeScreen(navController: NavHostController) {
     Column(
         modifier = Modifier
             .fillMaxSize()

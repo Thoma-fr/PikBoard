@@ -11,6 +11,7 @@ class PikBoardApiViewModel: ViewModel(){
     private val pikBoardApi = RetrofitInstance.pikBoardApi
     val loginResponse = MutableLiveData<NetworkResponse<LoginResponse>>()
     val signupResponse = MutableLiveData<NetworkResponse<Unit>>()
+    val userFromSessionTokenResponse = MutableLiveData<NetworkResponse<UserResponse>>()
 
     fun login(email:String, password: String) {
         loginResponse.value = NetworkResponse.Loading
@@ -46,6 +47,27 @@ class PikBoardApiViewModel: ViewModel(){
                     signupResponse.value = NetworkResponse.Error(errorMessage)                }
             } catch (e: Exception) {
                 signupResponse.value = NetworkResponse.Error("Read crash")
+            }
+        }
+    }
+
+    fun getUserFromSessionToken(token: String) {
+        userFromSessionTokenResponse.value = NetworkResponse.Loading
+        viewModelScope.launch {
+            try {
+                val bearerToken = "Bearer $token"
+                val response = pikBoardApi.getUserFromSessionToken(bearerToken)
+                if (response.isSuccessful){
+                    response.body()?.let {
+                        userFromSessionTokenResponse.value = NetworkResponse.Success(it)
+                    }
+                } else {
+                    val errorMessage = when (response.code()) {
+                        else -> "Server error"
+                    }
+                    userFromSessionTokenResponse.value = NetworkResponse.Error(errorMessage)                }
+            } catch (e: Exception) {
+                userFromSessionTokenResponse.value = NetworkResponse.Error("Read crash")
             }
         }
     }
