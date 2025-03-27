@@ -1,6 +1,5 @@
 package com.example.pikboard
 
-import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -11,17 +10,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.booleanPreferencesKey
-import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.room.Room
 import com.example.pikboard.api.PikBoardApiViewModel
 import com.example.pikboard.ui.Fragment.PikNavBar
 import com.example.pikboard.ui.screens.game.AddGamePage
@@ -33,7 +28,6 @@ import com.example.pikboard.ui.screens.auth.LoginScreen
 import com.example.pikboard.ui.screens.Routes
 import com.example.pikboard.ui.screens.auth.SignupScreen
 import com.example.pikboard.ui.theme.PikBoardTheme
-import java.util.prefs.Preferences
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -82,7 +76,7 @@ class MainActivity : ComponentActivity() {
                     FriendsScreen()
                 }
                 composable(Routes.PROFILE_PAGE) {
-                    ProfilePage()
+                    ProfilePage(pikBoardApiViewModel)
                 }
                 composable(Routes.Game.NEW) {
                     AddGamePage()

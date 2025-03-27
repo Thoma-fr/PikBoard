@@ -2,15 +2,30 @@ package com.example.pikboard.api
 
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.POST
 
 
-data class Data(
+data class Token(
     val token: String
 )
 
 data class LoginResponse(
-    val `data`: Data
+    val `data`: Token
+)
+
+data class UserApi(
+    val id: Int,
+    val username: String,
+    val email: String,
+    val phone: String,
+    val created_at: String,
+    val updated_at: String
+)
+
+data class UserResponse(
+    var `data`: UserApi
 )
 
 data class LoginRequest(
@@ -34,4 +49,9 @@ interface PikBoardApi {
     suspend fun signup(
         @Body() request:SignupRequest
     ):Response<Void>
+
+    @GET("user/self")
+    suspend fun getUserFromSessionToken(
+        @Header("Authorization") token: String
+    ):Response<UserResponse>
 }

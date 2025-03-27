@@ -72,7 +72,6 @@ fun LoginScreen(navController: NavHostController, viewModel: PikBoardApiViewMode
                 saveSessionToken(context, result.data.data.token)
             }
 
-            // result.data.data.token
             navController.navigate(Routes.HOME_PAGE)
         }
         null -> {}
