@@ -63,8 +63,8 @@ fun HomeScreen(navController: NavHostController) {
         }
     }
 }
-//@Preview(showBackground = true)
-//@Composable
-//fun HomeScreenPreview() {
-//    HomeScreen( rememberNavController(), ())
-//}
+@Preview(showBackground = true)
+@Composable
+fun HomeScreenPreview() {
+    HomeScreen( rememberNavController())
+}

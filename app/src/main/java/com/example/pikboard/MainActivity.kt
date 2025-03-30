@@ -5,6 +5,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -16,7 +18,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import androidx.room.Room
 import com.example.pikboard.api.PikBoardApiViewModel
 import com.example.pikboard.ui.Fragment.PikNavBar
 import com.example.pikboard.ui.screens.game.AddGamePage
@@ -28,6 +29,7 @@ import com.example.pikboard.ui.screens.auth.LoginScreen
 import com.example.pikboard.ui.screens.Routes
 import com.example.pikboard.ui.screens.auth.SignupScreen
 import com.example.pikboard.ui.theme.PikBoardTheme
+import androidx.compose.ui.unit.LayoutDirection
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,7 +37,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             PikBoardTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) {innerPadding ->
+                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     PikBoardApp(innerPadding)
                 }
             }
@@ -61,7 +63,11 @@ class MainActivity : ComponentActivity() {
             NavHost(
                 navController = navController,
                 startDestination = Routes.Auth.LOGIN_PAGE,
-                modifier = Modifier.padding(scaffoldPadding)
+                modifier = Modifier.padding(
+                    top = scaffoldPadding.calculateTopPadding(),
+                    start = scaffoldPadding.calculateStartPadding(LayoutDirection.Ltr),
+                    end = scaffoldPadding.calculateEndPadding(LayoutDirection.Rtl)
+                )
             ) {
                 composable(Routes.Auth.LOGIN_PAGE) {
                     LoginScreen(navController, pikBoardApiViewModel)
