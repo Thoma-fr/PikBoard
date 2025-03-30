@@ -30,7 +30,7 @@ fun FriendTile(name: String = "BIBI") {
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Image(
-                painter = painterResource(id = R.drawable.phchess),
+                painter = painterResource(id = R.drawable.default_image),
                 contentDescription = null,
                 modifier = Modifier.size(40.dp)
             )
