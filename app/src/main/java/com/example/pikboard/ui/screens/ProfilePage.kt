@@ -94,16 +94,16 @@ fun ProfilePage(pikBoardApiViewModel: PikBoardApiViewModel) {
                 horizontalAlignment = Alignment.Start,
                 modifier = Modifier.fillMaxWidth()
             ) {
+                if (user != null) {
                 Row(
                 ) {
                     ProfileImage(
-                        url = "https://static.wikia.nocookie.net/176b4b04-c2ea-494d-8a62-5a273c54e32d/scale-to-width/755",
+                        url = user!!.image,
                         150.dp
                     )
 
                     Spacer(modifier = Modifier.width(8.dp))
 
-                    if (user != null) {
                         Column {
                             Text(text = "${user!!.username}")
                             Text(text = "${user!!.email}")
