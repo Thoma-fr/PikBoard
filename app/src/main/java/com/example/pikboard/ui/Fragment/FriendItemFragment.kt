@@ -5,10 +5,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -37,24 +33,9 @@ fun FriendTile(name: String = "BIBI") {
             Spacer(modifier = Modifier.width(8.dp))
             Text(text = name, fontSize = 16.sp, color = Color.Black)
         }
-
-        Row {
-            Icon(
-                imageVector = Icons.Default.Close,
-                contentDescription = "Cancel",
-                tint = Color.Black,
-                modifier = Modifier.size(32.dp)
-            )
-            Spacer(modifier = Modifier.width(8.dp))
-            Icon(
-                imageVector = Icons.Default.Check,
-                contentDescription = "Confirm",
-                tint = Color.Black,
-                modifier = Modifier.size(32.dp)
-            )
-        }
     }
 }
+
 @Composable
 @Preview(showBackground = true)
 fun FriendTilePreview() {
