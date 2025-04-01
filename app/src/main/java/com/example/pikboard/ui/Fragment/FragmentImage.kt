@@ -30,8 +30,8 @@ fun ProfileImage(url:String, size: Dp) {
      val painter = rememberAsyncImagePainter(
          model = ImageRequest.Builder(LocalContext.current)
              .data(url)
-//             .diskCachePolicy(CachePolicy.DISABLED)
-//             .memoryCachePolicy(CachePolicy.DISABLED)
+             .diskCachePolicy(CachePolicy.DISABLED)
+             .memoryCachePolicy(CachePolicy.DISABLED)
 //             .networkCachePolicy(CachePolicy.DISABLED)
              .crossfade(true)
              .build()

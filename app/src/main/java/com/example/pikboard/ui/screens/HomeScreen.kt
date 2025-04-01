@@ -26,6 +26,7 @@ import com.example.pikboard.ui.Fragment.PikHeader
 import com.example.pikboard.ui.Fragment.Tile
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.plus
+import okhttp3.Route
 
 @Composable
 fun HomeScreen(navController: NavHostController) {
@@ -39,7 +40,9 @@ fun HomeScreen(navController: NavHostController) {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        PikButton("New Game") { /* Action */ }
+        PikButton("New Game") {
+            navController.navigate(Routes.Game.NEW)
+        }
 
         Spacer(modifier = Modifier.height(8.dp))
 

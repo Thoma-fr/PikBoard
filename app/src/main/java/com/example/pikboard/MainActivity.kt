@@ -30,6 +30,9 @@ import com.example.pikboard.ui.screens.Routes
 import com.example.pikboard.ui.screens.auth.SignupScreen
 import com.example.pikboard.ui.theme.PikBoardTheme
 import androidx.compose.ui.unit.LayoutDirection
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.pikboard.store.SharedImageViewModel
+import com.example.pikboard.ui.screens.game.GamePreviewScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,6 +53,8 @@ class MainActivity : ComponentActivity() {
         val navController = rememberNavController()
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route
+        val sharedViewModel: SharedImageViewModel = viewModel()
+
 
         Scaffold(
             bottomBar = {
@@ -85,10 +90,13 @@ class MainActivity : ComponentActivity() {
                     ProfilePage(pikBoardApiViewModel)
                 }
                 composable(Routes.Game.NEW) {
-                    AddGamePage()
+                    AddGamePage(navController, sharedViewModel)
                 }
                 composable(Routes.Game.CHESS){
                     GameScreen()
+                }
+                composable(Routes.Game.PREVIEW) {
+                    GamePreviewScreen(navController, sharedViewModel)
                 }
             }
         }
