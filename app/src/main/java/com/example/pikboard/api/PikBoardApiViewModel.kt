@@ -12,6 +12,7 @@ class PikBoardApiViewModel: ViewModel(){
     val loginResponse = MutableLiveData<NetworkResponse<LoginResponse>>()
     val signupResponse = MutableLiveData<NetworkResponse<Unit>>()
     val userFromSessionTokenResponse = MutableLiveData<NetworkResponse<UserResponse>>()
+    val fenToImageResponse = MutableLiveData<NetworkResponse<FenToImageResponse>>()
 
     fun login(email:String, password: String) {
         loginResponse.value = NetworkResponse.Loading
@@ -68,6 +69,28 @@ class PikBoardApiViewModel: ViewModel(){
                     userFromSessionTokenResponse.value = NetworkResponse.Error(errorMessage)                }
             } catch (e: Exception) {
                 userFromSessionTokenResponse.value = NetworkResponse.Error("Read crash")
+            }
+        }
+    }
+
+    fun getFenToImage(fen: String, pov: String? = null) {
+        // Indique que le chargement commence
+        fenToImageResponse.value = NetworkResponse.Loading
+
+        viewModelScope.launch {
+            try {
+                val response = pikBoardApi.fenToImage(fen, pov)
+                if (response.isSuccessful) {
+                    response.body()?.let { data ->
+                        fenToImageResponse.value = NetworkResponse.Success(data)
+                    } ?: run {
+                        fenToImageResponse.value = NetworkResponse.Error("Pas de données")
+                    }
+                } else {
+                    fenToImageResponse.value = NetworkResponse.Error("Erreur du serveur")
+                }
+            } catch (e: Exception) {
+                fenToImageResponse.value = NetworkResponse.Error("Exception : ${e.message}")
             }
         }
     }

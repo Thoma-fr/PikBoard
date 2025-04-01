@@ -55,7 +55,38 @@ fun ProfileImage(url:String, size: Dp) {
          )
      }
 }
+@SuppressLint("StateFlowValueCalledInComposition")
+@Composable
+fun TileImage(url:String, size: Dp) {
+    val painter = rememberAsyncImagePainter(
+        model = ImageRequest.Builder(LocalContext.current)
+            .data(url)
+            .crossfade(true)
+            .build()
+    )
 
+    Box(modifier = Modifier.size(size)
+        .clip(RoundedCornerShape(8.dp))
+    ) {
+        if (painter.state.value is AsyncImagePainter.State.Loading) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Gray),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator()
+            }
+        }
+
+        Image(
+            painter = painter,
+            contentDescription = "Tile Game image",
+            modifier = Modifier.fillMaxSize()
+
+        )
+    }
+}
 @Preview(showBackground = true)
 @Composable
 fun ProfileImagePreview() {

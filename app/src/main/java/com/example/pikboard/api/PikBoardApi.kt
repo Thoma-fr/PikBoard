@@ -5,6 +5,7 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
+import retrofit2.http.Query
 
 
 data class Token(
@@ -38,7 +39,9 @@ data class SignupRequest(
     val email: String,
     val password: String
 )
-
+data class FenToImageResponse(
+    val data: String
+)
 interface PikBoardApi {
     @POST("login")
     suspend fun login(
@@ -54,4 +57,12 @@ interface PikBoardApi {
     suspend fun getUserFromSessionToken(
         @Header("Authorization") token: String
     ):Response<UserResponse>
+
+    @GET("Chess/chess")
+    suspend fun fenToImage(
+        @Query("q") fen: String,
+        @Query("pov") pov: String? = null  // facultatif, ici par exemple "black" si besoin
+    ): Response<FenToImageResponse>
+
+
 }
