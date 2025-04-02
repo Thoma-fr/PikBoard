@@ -72,7 +72,8 @@ fun GameScreen(navController: NavHostController, sharedViewModel: SharedImageVie
                 fen = fenPosition,
                 playerIsWhite = playerIsWhite,
                 onMove = { newFen ->
-                    fenPosition = newFen
+                    sharedViewModel.setCurrentFenP(newFen)
+//                    fenPosition = newFen
                     val toPlay = if (newFen.split(" ")[1] == "w") "Blancs" else "Noirs"
                     Toast.makeText(context, "Au tour des $toPlay", Toast.LENGTH_SHORT).show()
                 },
