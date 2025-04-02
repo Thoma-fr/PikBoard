@@ -32,6 +32,7 @@ import com.example.pikboard.ui.theme.PikBoardTheme
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.pikboard.store.SharedImageViewModel
+import com.example.pikboard.ui.screens.game.GameFriendSreen
 import com.example.pikboard.ui.screens.game.GamePreviewScreen
 
 class MainActivity : ComponentActivity() {
@@ -97,6 +98,9 @@ class MainActivity : ComponentActivity() {
                 }
                 composable(Routes.Game.PREVIEW) {
                     GamePreviewScreen(navController, sharedViewModel, pikBoardApiViewModel)
+                }
+                composable(Routes.Game.FRIEND) {
+                    GameFriendSreen(navController, sharedViewModel, pikBoardApiViewModel)
                 }
             }
         }

@@ -86,7 +86,7 @@ fun GamePreviewScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        Text(text="New Game")
+        Text(text="Config position")
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -100,7 +100,7 @@ fun GamePreviewScreen(
             PikButton("Validate"){
                 // INFO: This is the final fen sent to the game page
                 sharedViewModel.setCurrentFenP(fen)
-                navController.navigate(Routes.Game.CHESS)
+                navController.navigate(Routes.Game.FRIEND)
             }
 
         } else {

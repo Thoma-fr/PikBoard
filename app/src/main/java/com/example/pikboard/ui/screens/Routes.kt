@@ -9,6 +9,7 @@ object Routes {
         const val NEW = "NEW_GAME"
         const val PREVIEW = "CHESS_PREVIEW"
         const val CHESS = "CHESS"
+        const val FRIEND = "CHESS_FRIEND"
     }
 
     const val HOME_PAGE = "HOME_PAGE"
