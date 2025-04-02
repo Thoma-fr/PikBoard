@@ -1,11 +1,20 @@
 package com.example.pikboard.api
 
+import android.graphics.Bitmap
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
+import retrofit2.http.Multipart
 import retrofit2.http.POST
+import retrofit2.http.Part
 import retrofit2.http.Query
+import java.io.ByteArrayOutputStream
+
 
 
 data class Token(
@@ -18,6 +27,7 @@ data class LoginResponse(
 
 data class UserApi(
     val id: Int,
+    val image: String,
     val username: String,
     val email: String,
     val phone: String,
@@ -27,6 +37,14 @@ data class UserApi(
 
 data class UserResponse(
     var `data`: UserApi
+)
+
+data class FriendsResponse(
+    val `data`: List<UserApi>
+)
+
+data class FemResponse(
+    val `data`: String
 )
 
 data class LoginRequest(
@@ -39,9 +57,21 @@ data class SignupRequest(
     val email: String,
     val password: String
 )
+
 data class FenToImageResponse(
     val data: String
 )
+
+
+data class SearchResult(
+    val friends: List<UserApi>,
+    val potentialFriends: List<UserApi>
+)
+
+data class SearchResponse(
+    val `data`: SearchResult
+)
+
 interface PikBoardApi {
     @POST("login")
     suspend fun login(
@@ -61,8 +91,55 @@ interface PikBoardApi {
     @GET("Chess/chess")
     suspend fun fenToImage(
         @Query("q") fen: String,
-        @Query("pov") pov: String? = null  // facultatif, ici par exemple "black" si besoin
+        @Query("pov") pov: String? = null 
     ): Response<FenToImageResponse>
 
+    @GET("user/friends")
+    suspend fun getFriends(
+        @Header("Authorization") token: String
+    ): Response<FriendsResponse>
 
+    @GET("friend/request")
+    suspend fun getPendingFriendRequests(
+        @Header("Authorization") token: String
+    ): Response<FriendsResponse>
+
+    @GET("friend/sent")
+    suspend fun getSentFriendRequests(
+        @Header("Authorization") token: String
+    ): Response<FriendsResponse>
+
+    @POST("friend/request")
+    suspend fun sendFriendRequest(
+        @Header("Authorization") token: String,
+        @Query("id") userId: Int
+    ): Response<Unit>
+
+    @POST("friend/accept")
+    suspend fun acceptFriendRequest(
+        @Header("Authorization") token: String,
+        @Query("friend_id") friendId: Int,
+        @Body answer: Map<String, Boolean>
+    ): Response<Unit>
+
+    @GET("user/search")
+    suspend fun searchUsers(
+        @Header("Authorization") token: String,
+        @Query("username") query: String
+    ): Response<FriendsResponse>
+
+    fun Bitmap.toMultipartBodyPart(partName: String): MultipartBody.Part {
+        val stream = ByteArrayOutputStream()
+        this.compress(Bitmap.CompressFormat.PNG, 100, stream)
+        val byteArray = stream.toByteArray()
+        val requestBody: RequestBody = byteArray.toRequestBody("image/png".toMediaTypeOrNull())
+        return MultipartBody.Part.createFormData(partName, "image.png", requestBody)
+    }
+
+    @Multipart
+    @POST("game/position")
+    suspend fun imageToFen(
+        @Header("Authorization") token: String,
+        @Part img: MultipartBody.Part
+    ): Response<FemResponse>
 }

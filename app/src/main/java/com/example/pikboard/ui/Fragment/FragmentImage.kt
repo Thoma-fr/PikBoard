@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImagePainter
 import coil3.compose.rememberAsyncImagePainter
+import coil3.request.CachePolicy
 import coil3.request.ImageRequest
 import coil3.request.crossfade
 
@@ -29,6 +30,9 @@ fun ProfileImage(url:String, size: Dp) {
      val painter = rememberAsyncImagePainter(
          model = ImageRequest.Builder(LocalContext.current)
              .data(url)
+             .diskCachePolicy(CachePolicy.DISABLED)
+             .memoryCachePolicy(CachePolicy.DISABLED)
+//             .networkCachePolicy(CachePolicy.DISABLED)
              .crossfade(true)
              .build()
      )
