@@ -91,7 +91,7 @@ fun AddGamePage( navController: NavController, sharedViewModel: SharedImageViewM
         Text(text="New Game")
 
         PikButton(text="From Scratch") {
-            sharedViewModel.setCurrentFenP("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b - - 0 1")
+            sharedViewModel.setCurrentFenP("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w - - 0 1")
             navController.navigate(Routes.Game.PREVIEW)
         }
         PikButton(text="From camera") {

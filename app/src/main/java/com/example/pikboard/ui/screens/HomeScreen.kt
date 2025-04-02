@@ -98,8 +98,8 @@ fun HomeScreen(navController: NavHostController, pikBoardApiViewModel: PikBoardA
             columns = GridCells.Fixed(2),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            items(games) { game ->
-                Tile(name = "isaac", fem = game.board, onClick = {
+            items(7) { _ ->
+                Tile(name = "isaac", fem = "q7/N7/p2P3B/8/pP1P4/K2kPB2/4bpp1/n7 w - - 0 1", onClick = {
                     navController.navigate(Routes.Game.CHESS)
                 })
             }
