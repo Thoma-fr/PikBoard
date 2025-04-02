@@ -1,10 +1,13 @@
 package com.example.pikboard.api
 
+import android.graphics.Bitmap
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
+import okhttp3.MultipartBody
+import retrofit2.http.Multipart
 
 class PikBoardApiViewModel: ViewModel(){
 
@@ -17,6 +20,7 @@ class PikBoardApiViewModel: ViewModel(){
     val sentRequestsResponse = MutableLiveData<NetworkResponse<FriendsResponse>>()
     val friendRequestResponse = MutableLiveData<NetworkResponse<Unit>>()
     val searchUsersResponse = MutableLiveData<NetworkResponse<SearchResponse>>()
+    val imageToFenResponse = MutableLiveData<NetworkResponse<FemResponse>>()
 
     fun login(email:String, password: String) {
         loginResponse.value = NetworkResponse.Loading
@@ -31,6 +35,7 @@ class PikBoardApiViewModel: ViewModel(){
                     loginResponse.value = NetworkResponse.Error("Failed to load data")
                 }
             } catch (e: Exception) {
+                Log.i("Error api", e.toString())
                 loginResponse.value = NetworkResponse.Error("Read crash")
             }
         }
@@ -51,6 +56,7 @@ class PikBoardApiViewModel: ViewModel(){
                     }
                     signupResponse.value = NetworkResponse.Error(errorMessage)                }
             } catch (e: Exception) {
+                Log.i("Error api", e.toString())
                 signupResponse.value = NetworkResponse.Error("Read crash")
             }
         }
@@ -202,4 +208,25 @@ class PikBoardApiViewModel: ViewModel(){
             }
         }
     }
+
+    fun imageToFen(token: String, img: MultipartBody.Part) {
+        imageToFenResponse.value = NetworkResponse.Loading
+        viewModelScope.launch {
+            try {
+                val bearerToken = "Bearer $token"
+                Log.i("debug", bearerToken)
+                val response = pikBoardApi.imageToFen(bearerToken, img)
+                if (response.isSuccessful) {
+                    response.body()?.let {
+                        imageToFenResponse.value = NetworkResponse.Success(it)
+                    }
+                } else {
+                    imageToFenResponse.value = NetworkResponse.Error("Server error")
+                }
+            } catch (e: Exception) {
+                imageToFenResponse.value = NetworkResponse.Error("Read crash")
+            }
+        }
+    }
+
 }

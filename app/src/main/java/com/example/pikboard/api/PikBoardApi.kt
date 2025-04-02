@@ -1,11 +1,19 @@
 package com.example.pikboard.api
 
+import android.graphics.Bitmap
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
+import retrofit2.http.Multipart
 import retrofit2.http.POST
+import retrofit2.http.Part
 import retrofit2.http.Query
+import java.io.ByteArrayOutputStream
 
 
 data class Token(
@@ -32,6 +40,10 @@ data class UserResponse(
 
 data class FriendsResponse(
     val `data`: List<UserApi>
+)
+
+data class FemResponse(
+    val `data`: String
 )
 
 data class LoginRequest(
@@ -103,4 +115,19 @@ interface PikBoardApi {
         @Header("Authorization") token: String,
         @Query("username") query: String
     ): Response<FriendsResponse>
+
+    fun Bitmap.toMultipartBodyPart(partName: String): MultipartBody.Part {
+        val stream = ByteArrayOutputStream()
+        this.compress(Bitmap.CompressFormat.PNG, 100, stream)
+        val byteArray = stream.toByteArray()
+        val requestBody: RequestBody = byteArray.toRequestBody("image/png".toMediaTypeOrNull())
+        return MultipartBody.Part.createFormData(partName, "image.png", requestBody)
+    }
+
+    @Multipart
+    @POST("game/position")
+    suspend fun imageToFen(
+        @Header("Authorization") token: String,
+        @Part img: MultipartBody.Part
+    ): Response<FemResponse>
 }
