@@ -59,7 +59,7 @@ fun HomeScreen(navController: NavHostController) {
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             items(7) { _ ->
-                Tile(name = "isaac", {
+                Tile(name = "isaac", onClick = {
                     navController.navigate(Routes.Game.CHESS)
                 })
             }

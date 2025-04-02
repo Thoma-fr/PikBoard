@@ -14,7 +14,9 @@ import androidx.compose.ui.unit.dp
 import com.example.pikboard.R
 
 @Composable
-fun Tile(name: String, onClick: () -> Unit)
+fun Tile(name: String="Name",
+         url:String="https://gnat-happy-drake.ngrok-free.app/v1/chess?q=r1bk3r/p2pBpNp/n4n2/1p1NP2P/6P1/3P4/P1P1K3/q5b1",
+         onClick: () -> Unit)
 {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -25,17 +27,14 @@ fun Tile(name: String, onClick: () -> Unit)
             horizontalAlignment = Alignment.Start
         ) {
             Text(text = "Adversaire ".plus(name))
-            Image(
-                painter = painterResource(id = R.drawable.phchess),
-                contentDescription = "",
-                modifier = Modifier.height(150.dp),
-            )
-            Text(text = "Votre tour")
+
+            TileImage(url,150.dp)
+
         }
     }
 }
 @Preview(showBackground = true)
 @Composable
 fun DisplayTilesPreview() {
-    Tile(name = "toto", {})
+    //Tile(name = "toto", {})
 }

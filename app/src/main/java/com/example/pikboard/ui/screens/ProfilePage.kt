@@ -99,6 +99,7 @@ fun ProfilePage(pikBoardApiViewModel: PikBoardApiViewModel) {
                 ) {
                     ProfileImage(
                         url = user!!.image,
+
                         150.dp
                     )
 

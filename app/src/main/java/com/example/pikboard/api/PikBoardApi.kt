@@ -16,6 +16,7 @@ import retrofit2.http.Query
 import java.io.ByteArrayOutputStream
 
 
+
 data class Token(
     val token: String
 )
@@ -57,6 +58,11 @@ data class SignupRequest(
     val password: String
 )
 
+data class FenToImageResponse(
+    val data: String
+)
+
+
 data class SearchResult(
     val friends: List<UserApi>,
     val potentialFriends: List<UserApi>
@@ -81,6 +87,12 @@ interface PikBoardApi {
     suspend fun getUserFromSessionToken(
         @Header("Authorization") token: String
     ):Response<UserResponse>
+
+    @GET("Chess/chess")
+    suspend fun fenToImage(
+        @Query("q") fen: String,
+        @Query("pov") pov: String? = null 
+    ): Response<FenToImageResponse>
 
     @GET("user/friends")
     suspend fun getFriends(
