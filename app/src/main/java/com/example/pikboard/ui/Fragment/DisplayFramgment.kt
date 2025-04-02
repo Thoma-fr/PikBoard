@@ -4,10 +4,13 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.AddReaction
+import androidx.compose.material.icons.filled.Groups
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.outlined.Add
+import androidx.compose.material.icons.outlined.Groups
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.Share
@@ -74,11 +77,10 @@ fun PikNavBar(navController: NavHostController) {
             hasNews = false,
             route = Routes.Game.NEW
         ),
-        // TODO: Ajouter plus d'icone (pour pouvoir avoir un icon "groupe")
         BottomNavigationItem(
             title = "Friend",
-            selectedIcon = Icons.Filled.Share,
-            unselectedIcon = Icons.Outlined.Share,
+            selectedIcon = Icons.Filled.Groups,
+            unselectedIcon = Icons.Outlined.Groups,
             hasNews = false,
             route = Routes.FRIENDS_PAGE
         ),
