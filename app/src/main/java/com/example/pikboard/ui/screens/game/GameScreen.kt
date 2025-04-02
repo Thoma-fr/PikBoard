@@ -18,22 +18,22 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.example.pikboard.chess.ChessBoard
 import com.example.pikboard.chess.ChessGameState
 import com.example.pikboard.chess.ChessRules
 import com.example.pikboard.chess.parseFEN
+import com.example.pikboard.store.SharedImageViewModel
 
 @Composable
-fun GameScreen() {
+fun GameScreen(navController: NavHostController, sharedViewModel: SharedImageViewModel) {
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        var fenPosition by remember {
-            mutableStateOf("8/7P/8/2K5/4k3/8/8/8 w - - 0 1")
-        }
+        var fenPosition = sharedViewModel.pcurrentFen
 
         val playerIsWhite = true
         val context = LocalContext.current

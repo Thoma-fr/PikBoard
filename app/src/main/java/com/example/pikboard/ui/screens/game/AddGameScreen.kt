@@ -91,7 +91,8 @@ fun AddGamePage( navController: NavController, sharedViewModel: SharedImageViewM
         Text(text="New Game")
 
         PikButton(text="From Scratch") {
-            // TODO: Redirect to preview game
+            sharedViewModel.setCurrentFenP("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b - - 0 1")
+            navController.navigate(Routes.Game.PREVIEW)
         }
         PikButton(text="From camera") {
             camPermission.launch(android.Manifest.permission.CAMERA)

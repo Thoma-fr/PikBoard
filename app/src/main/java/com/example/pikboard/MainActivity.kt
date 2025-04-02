@@ -93,10 +93,10 @@ class MainActivity : ComponentActivity() {
                     AddGamePage(navController, sharedViewModel)
                 }
                 composable(Routes.Game.CHESS){
-                    GameScreen()
+                    GameScreen(navController, sharedViewModel)
                 }
                 composable(Routes.Game.PREVIEW) {
-                    GamePreviewScreen(navController, sharedViewModel)
+                    GamePreviewScreen(navController, sharedViewModel, pikBoardApiViewModel)
                 }
             }
         }
