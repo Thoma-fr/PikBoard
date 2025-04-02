@@ -15,7 +15,7 @@ import com.example.pikboard.R
 
 @Composable
 fun Tile(name: String="Name",
-         url:String="https://gnat-happy-drake.ngrok-free.app/v1/chess?q=r1bk3r/p2pBpNp/n4n2/1p1NP2P/6P1/3P4/P1P1K3/q5b1",
+         fem: String,
          onClick: () -> Unit)
 {
     Column(
@@ -28,6 +28,7 @@ fun Tile(name: String="Name",
         ) {
             Text(text = "Adversaire ".plus(name))
 
+            val url ="https://gnat-happy-drake.ngrok-free.app/v1/chess?q="+fem
             TileImage(url,150.dp)
 
         }

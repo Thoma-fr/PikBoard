@@ -22,6 +22,7 @@ class PikBoardApiViewModel: ViewModel(){
     val friendRequestResponse = MutableLiveData<NetworkResponse<Unit>>()
     val searchUsersResponse = MutableLiveData<NetworkResponse<SearchResponse>>()
     val imageToFenResponse = MutableLiveData<NetworkResponse<FemResponse>>()
+    val currentGamesResponse = MutableLiveData<NetworkResponse<CurrentGameResponse>>()
 
     fun login(email:String, password: String) {
         loginResponse.value = NetworkResponse.Loading
@@ -236,7 +237,6 @@ class PikBoardApiViewModel: ViewModel(){
         viewModelScope.launch {
             try {
                 val bearerToken = "Bearer $token"
-                Log.i("debug", bearerToken)
                 val response = pikBoardApi.imageToFen(bearerToken, img)
                 if (response.isSuccessful) {
                     response.body()?.let {
@@ -247,6 +247,25 @@ class PikBoardApiViewModel: ViewModel(){
                 }
             } catch (e: Exception) {
                 imageToFenResponse.value = NetworkResponse.Error("Read crash")
+            }
+        }
+    }
+
+    fun currentGame(token: String) {
+        currentGamesResponse.value = NetworkResponse.Loading
+        viewModelScope.launch {
+            try {
+                val bearerToken = "Bearer $token"
+                val response = pikBoardApi.currentGames(bearerToken)
+                if (response.isSuccessful) {
+                    response.body()?.let {
+                        currentGamesResponse.value = NetworkResponse.Success(it)
+                    }
+                } else {
+                    currentGamesResponse.value = NetworkResponse.Error("Server error")
+                }
+            } catch (e: Exception) {
+                currentGamesResponse.value = NetworkResponse.Error("Read crash")
             }
         }
     }
