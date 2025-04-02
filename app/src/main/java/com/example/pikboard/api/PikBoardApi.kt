@@ -1,6 +1,7 @@
 package com.example.pikboard.api
 
 import android.graphics.Bitmap
+import androidx.compose.ui.Modifier
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -45,6 +46,18 @@ data class FriendsResponse(
 
 data class FemResponse(
     val `data`: String
+)
+
+data class CurrentGameResponse(
+    val `data`: List<CurrentGame>
+)
+
+data class CurrentGame(
+    val id: Int,
+    val user: UserApi,
+    val opponent: UserApi,
+    val board: String,
+    // TODO: Ajouter les status
 )
 
 data class LoginRequest(
@@ -142,4 +155,9 @@ interface PikBoardApi {
         @Header("Authorization") token: String,
         @Part img: MultipartBody.Part
     ): Response<FemResponse>
+
+    @GET("game/current")
+    suspend fun currentGames(
+        @Header("Authorization") token: String,
+    ): Response<CurrentGameResponse>
 }
