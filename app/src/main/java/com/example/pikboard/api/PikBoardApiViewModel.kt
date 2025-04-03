@@ -24,7 +24,7 @@ class PikBoardApiViewModel: ViewModel(){
     val searchUsersResponse = MutableLiveData<NetworkResponse<SearchResponse>>()
     val imageToFenResponse = MutableLiveData<NetworkResponse<FemResponse>>()
     val currentGamesResponse = MutableLiveData<NetworkResponse<CurrentGameResponse>>()
-    var createGameResponse = MutableLiveData<NetworkResponse<Unit>>()
+    var createGameResponse = MutableLiveData<NetworkResponse<Unit>?>()
 
     fun login(email:String, password: String) {
         loginResponse.value = NetworkResponse.Loading
@@ -290,5 +290,9 @@ class PikBoardApiViewModel: ViewModel(){
                 createGameResponse.value = NetworkResponse.Error("Read crash")
             }
         }
+    }
+
+    fun resetCreateGameResponse() {
+        createGameResponse.value = null
     }
 }

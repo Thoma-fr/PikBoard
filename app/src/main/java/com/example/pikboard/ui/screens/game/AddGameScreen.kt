@@ -43,13 +43,14 @@ fun AddGamePage( navController: NavController, sharedViewModel: SharedImageViewM
     val context = LocalContext.current
     val galleryLauncher = rememberLauncherForActivityResult(contract= ActivityResultContracts.GetContent()) {
         uri ->
+        if(uri != null) {
+            val inputStream = context.contentResolver.openInputStream(uri)
+            val bitmap = BitmapFactory.decodeStream(inputStream)
+            inputStream?.close()
 
-        val inputStream = context.contentResolver.openInputStream(uri!!)
-        val bitmap = BitmapFactory.decodeStream(inputStream)
-        inputStream?.close()
-
-        sharedViewModel.setImageBitmap(bitmap)
-        navController.navigate(Routes.Game.PREVIEW)
+            sharedViewModel.setImageBitmap(bitmap)
+            navController.navigate(Routes.Game.PREVIEW)
+        }
 
     }
 
