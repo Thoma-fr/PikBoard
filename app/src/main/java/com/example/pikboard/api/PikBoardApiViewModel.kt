@@ -6,6 +6,7 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 import retrofit2.http.Multipart
@@ -21,9 +22,11 @@ class PikBoardApiViewModel: ViewModel(){
     val pendingRequestsResponse = MutableLiveData<NetworkResponse<FriendsResponse>>()
     val sentRequestsResponse = MutableLiveData<NetworkResponse<FriendsResponse>>()
     val friendRequestResponse = MutableLiveData<NetworkResponse<Unit>>()
+    val gameRequestResponse = MutableLiveData<NetworkResponse<Unit>>()
     val searchUsersResponse = MutableLiveData<NetworkResponse<SearchResponse>>()
     val imageToFenResponse = MutableLiveData<NetworkResponse<FemResponse>>()
     val currentGamesResponse = MutableLiveData<NetworkResponse<CurrentGameResponse>>()
+    val penddingGamesResponse = MutableLiveData<NetworkResponse<PendingGamesResponse>>()
     var createGameResponse = MutableLiveData<NetworkResponse<Unit>?>()
 
     fun login(email:String, password: String) {
@@ -88,7 +91,6 @@ class PikBoardApiViewModel: ViewModel(){
     }
 
     fun getFenToImage(fen: String, pov: String? = null) {
-        // Indique que le chargement commence
         fenToImageResponse.value = NetworkResponse.Loading
 
         viewModelScope.launch {
@@ -199,6 +201,23 @@ class PikBoardApiViewModel: ViewModel(){
         }
     }
 
+    fun acceptGameRequest(token: String, gameID: Int, accept: Boolean) {
+        gameRequestResponse.value = NetworkResponse.Loading
+        viewModelScope.launch {
+            try {
+                val bearerToken = "Bearer $token"
+                val response = pikBoardApi.acceptGameRequest(bearerToken, gameID, mapOf("answer" to accept))
+                if (response.isSuccessful) {
+                    gameRequestResponse.value = NetworkResponse.Success(Unit)
+                } else {
+                    gameRequestResponse.value = NetworkResponse.Error("Failed to ${if (accept) "accept" else "reject"} friend request")
+                }
+            } catch (e: Exception) {
+                gameRequestResponse.value = NetworkResponse.Error("Read crash")
+            }
+        }
+    }
+
     fun searchUsers(token: String, query: String) {
         searchUsersResponse.value = NetworkResponse.Loading
         viewModelScope.launch {
@@ -268,6 +287,25 @@ class PikBoardApiViewModel: ViewModel(){
                 }
             } catch (e: Exception) {
                 currentGamesResponse.value = NetworkResponse.Error("Read crash")
+            }
+        }
+    }
+
+    fun pendingGames(token: String) {
+        penddingGamesResponse.value = NetworkResponse.Loading
+        viewModelScope.launch {
+            try {
+                val bearerToken = "Bearer $token"
+                val response = pikBoardApi.pendingGames(bearerToken)
+                if (response.isSuccessful) {
+                    response.body()?.let {
+                        penddingGamesResponse.value = NetworkResponse.Success(it)
+                    }
+                } else {
+                    penddingGamesResponse.value = NetworkResponse.Error("Server error")
+                }
+            } catch (e: Exception) {
+                penddingGamesResponse.value = NetworkResponse.Error("Read crash")
             }
         }
     }

@@ -44,6 +44,10 @@ data class FriendsResponse(
     val `data`: List<UserApi>
 )
 
+data class PendingGamesResponse(
+    val `data`: List<CurrentGame>
+)
+
 data class FemResponse(
     val `data`: String
 )
@@ -140,6 +144,13 @@ interface PikBoardApi {
         @Body answer: Map<String, Boolean>
     ): Response<Unit>
 
+    @POST("game/accept")
+    suspend fun acceptGameRequest(
+        @Header("Authorization") token: String,
+        @Query("g") gameID: Int,
+        @Body answer: Map<String, Boolean>
+    ): Response<Unit>
+
     @GET("user/search")
     suspend fun searchUsers(
         @Header("Authorization") token: String,
@@ -165,6 +176,12 @@ interface PikBoardApi {
     suspend fun currentGames(
         @Header("Authorization") token: String,
     ): Response<CurrentGameResponse>
+
+    @GET("game/request")
+    suspend fun pendingGames(
+        @Header("Authorization") token: String
+    ): Response<PendingGamesResponse>
+
 
     @POST("game/new")
     suspend fun createGame(
