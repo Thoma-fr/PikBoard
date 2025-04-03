@@ -297,7 +297,7 @@ fun FriendsList(
         if (filteredPendingRequests.isNotEmpty()) {
             item {
                 Text(
-                    text = "Pending Requests",
+                    text = "Pending Friend Requests",
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.padding(vertical = 8.dp)

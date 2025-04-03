@@ -56,12 +56,16 @@ data class CurrentGameResponse(
     val `data`: List<CurrentGame>
 )
 
+data class EndedGameResponse(
+    val `data`: List<CurrentGame>
+)
+
 data class CurrentGame(
     val id: Int,
     val user: UserApi,
     val opponent: UserApi,
     val board: String,
-    val white_player_id: Int,
+    val white_player_id: Int?,
     val status: Status
 )
 
@@ -184,6 +188,11 @@ interface PikBoardApi {
     suspend fun currentGames(
         @Header("Authorization") token: String,
     ): Response<CurrentGameResponse>
+
+    @GET("game/end")
+    suspend fun endedGames(
+        @Header("Authorization") token: String,
+    ): Response<EndedGameResponse>
 
     @GET("game/request")
     suspend fun pendingGames(

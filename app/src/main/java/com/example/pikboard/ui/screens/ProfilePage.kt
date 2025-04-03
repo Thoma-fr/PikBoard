@@ -28,6 +28,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.pikboard.api.CurrentGame
 import com.example.pikboard.api.NetworkResponse
 import com.example.pikboard.api.PikBoardApiViewModel
 import com.example.pikboard.api.UserApi
@@ -42,6 +43,7 @@ fun ProfilePage(pikBoardApiViewModel: PikBoardApiViewModel) {
     val token by readSessionToken(context).collectAsState(initial = "")
 
     var user by remember { mutableStateOf<UserApi?>(null) }
+    var games by remember { mutableStateOf<List<CurrentGame>>(emptyList()) }
     var apiCallMade by remember { mutableStateOf(false) }
     var errorApiMessage by remember { mutableStateOf("") }
     var isLoading by remember{ mutableStateOf(false) }
@@ -50,11 +52,13 @@ fun ProfilePage(pikBoardApiViewModel: PikBoardApiViewModel) {
     LaunchedEffect(token) {
         if (token is String && (token as String).isNotEmpty() && apiCallMade == false) {
             pikBoardApiViewModel.getUserFromSessionToken(token as String)
+            pikBoardApiViewModel.endedGames(token as String)
             apiCallMade = true
         }
     }
 
     val loginResult = pikBoardApiViewModel.userFromSessionTokenResponse.observeAsState()
+    val gameHistoryResult = pikBoardApiViewModel.endedGamesResponse.observeAsState()
 
     when(val result = loginResult.value) {
         is NetworkResponse.Error -> {
@@ -66,6 +70,20 @@ fun ProfilePage(pikBoardApiViewModel: PikBoardApiViewModel) {
         }
         is NetworkResponse.Success -> {
             user = result.data.data
+            isLoading = false
+        }
+        null -> {}
+    }
+
+    when(val result = gameHistoryResult.value) {
+        is NetworkResponse.Error -> {
+            errorApiMessage = result.message
+        }
+        NetworkResponse.Loading -> {
+            isLoading = true
+        }
+        is NetworkResponse.Success -> {
+            games = result.data.data
             isLoading = false
         }
         null -> {}
@@ -88,7 +106,7 @@ fun ProfilePage(pikBoardApiViewModel: PikBoardApiViewModel) {
                     .size(20.dp)
             )
         } else if (errorApiMessage.isNotEmpty()){
-            Text(text= "Ther is an error with the api : $errorApiMessage")
+            Text(text= "There is an error with the api : $errorApiMessage")
         }else {
             Column(
                 horizontalAlignment = Alignment.Start,
@@ -132,8 +150,13 @@ fun ProfilePage(pikBoardApiViewModel: PikBoardApiViewModel) {
             Column(
                 verticalArrangement = Arrangement.spacedBy(1.dp),
             ) {
-                repeat(7) { _ ->
-                    FriendScore("user one", "user two", "1", "0"){}
+                games.forEach { game ->
+                    FriendScore(
+                        game.user.username,
+                        game.opponent.username,
+                        "",
+                        ""
+                    ) {}
                 }
             }
         }
