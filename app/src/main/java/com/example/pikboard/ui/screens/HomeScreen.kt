@@ -113,7 +113,8 @@ fun HomeScreen(
             }
         } else {
             Text(text = "You do not have games to continue")
-        }    }
+        }
+    }
 }
 @Preview(showBackground = true)
 @Composable
