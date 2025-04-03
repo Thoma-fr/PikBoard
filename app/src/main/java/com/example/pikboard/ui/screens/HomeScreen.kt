@@ -31,13 +31,18 @@ import androidx.navigation.compose.rememberNavController
 import com.example.pikboard.api.CurrentGame
 import com.example.pikboard.api.NetworkResponse
 import com.example.pikboard.api.PikBoardApiViewModel
+import com.example.pikboard.store.SharedImageViewModel
 import com.example.pikboard.store.readSessionToken
 import com.example.pikboard.ui.Fragment.PikButton
 import com.example.pikboard.ui.Fragment.PikHeader
 import com.example.pikboard.ui.Fragment.Tile
 
 @Composable
-fun HomeScreen(navController: NavHostController, pikBoardApiViewModel: PikBoardApiViewModel) {
+fun HomeScreen(
+    navController: NavHostController,
+    sharedViewModel: SharedImageViewModel,
+    pikBoardApiViewModel: PikBoardApiViewModel
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -101,6 +106,7 @@ fun HomeScreen(navController: NavHostController, pikBoardApiViewModel: PikBoardA
             ) {
                 items(games) { game ->
                     Tile(name = game.user.username, fem = game.board, onClick = {
+                        sharedViewModel.setCurrentFenP(game.board)
                         navController.navigate(Routes.Game.CHESS)
                     })
                 }
@@ -112,5 +118,5 @@ fun HomeScreen(navController: NavHostController, pikBoardApiViewModel: PikBoardA
 @Preview(showBackground = true)
 @Composable
 fun HomeScreenPreview() {
-    HomeScreen(rememberNavController(), viewModel())
+    HomeScreen(rememberNavController(), viewModel(), viewModel())
 }

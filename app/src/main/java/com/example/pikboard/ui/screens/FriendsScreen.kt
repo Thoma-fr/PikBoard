@@ -48,6 +48,7 @@ import com.example.pikboard.ui.Fragment.FriendTile
 import com.example.pikboard.ui.Fragment.PikHeader
 import com.example.pikboard.ui.Fragment.PikTextField
 import androidx.compose.foundation.shape.CircleShape
+import com.example.pikboard.api.CurrentGame
 import com.example.pikboard.store.readSessionToken
 
 @Composable
@@ -73,6 +74,7 @@ fun FriendsScreen(viewModel: PikBoardApiViewModel = viewModel()) {
     var searchQuery by remember { mutableStateOf("") }
     var friends by remember { mutableStateOf<List<UserApi>>(emptyList()) }
     var pendingRequests by remember { mutableStateOf<List<UserApi>>(emptyList()) }
+    var pendingGameRequests by remember { mutableStateOf<List<CurrentGame>>(emptyList()) }
     var searchResults by remember { mutableStateOf<SearchResult?>(null) }
     var isLoading by remember { mutableStateOf(false) }
     var currentUser by remember { mutableStateOf<UserApi?>(null) }
@@ -82,6 +84,7 @@ fun FriendsScreen(viewModel: PikBoardApiViewModel = viewModel()) {
     val token = if (tokenValue is String) tokenValue as String else ""
     val friendsResponse by viewModel.friendsResponse.observeAsState()
     val pendingRequestsResponse by viewModel.pendingRequestsResponse.observeAsState()
+    val pendingRequestsGameResponse by viewModel.penddingGamesResponse.observeAsState()
     val friendRequestResponse by viewModel.friendRequestResponse.observeAsState()
     val searchUsersResponse by viewModel.searchUsersResponse.observeAsState()
     val userFromSessionTokenResponse by viewModel.userFromSessionTokenResponse.observeAsState()
@@ -91,6 +94,7 @@ fun FriendsScreen(viewModel: PikBoardApiViewModel = viewModel()) {
             viewModel.getFriends(token)
             viewModel.getPendingFriendRequests(token)
             viewModel.getUserFromSessionToken(token)
+            viewModel.pendingGames(token)
         }
     }
 
@@ -138,6 +142,22 @@ fun FriendsScreen(viewModel: PikBoardApiViewModel = viewModel()) {
             }
             NetworkResponse.Loading -> {
                 isLoading = true
+            }
+            null -> {}
+        }
+    }
+
+    LaunchedEffect(pendingRequestsGameResponse) {
+        when(val result = pendingRequestsGameResponse) {
+            is NetworkResponse.Error -> {
+                isLoading = false
+            }
+            NetworkResponse.Loading -> {
+                isLoading = true
+            }
+            is NetworkResponse.Success -> {
+                pendingGameRequests = result.data.data
+                isLoading = false
             }
             null -> {}
         }
@@ -201,6 +221,35 @@ fun FriendsScreen(viewModel: PikBoardApiViewModel = viewModel()) {
                 modifier = Modifier.align(Alignment.CenterHorizontally)
             )
         } else {
+            
+            if (pendingGameRequests.isNotEmpty()) {
+                LazyColumn(
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    item {
+                        Text(
+                            text = "Pending Game Requests",
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.padding(vertical = 8.dp)
+                        )
+                    }
+                    items(pendingGameRequests) { game ->
+                        GameRequestTile(
+                            name = game.user.username,
+                            onAccept = {
+                                viewModel.acceptGameRequest(token, game.id, true)
+                                pendingGameRequests = pendingGameRequests.filterNot { it.id == game.id }
+                            },
+                            onReject = {
+                                viewModel.acceptGameRequest(token, game.id, false)
+                                pendingGameRequests = pendingGameRequests.filterNot { it.id == game.id }
+                            }
+                        )
+                    }
+                }
+            }
+
             FriendsList(
                 friends = friends,
                 pendingRequests = pendingRequests,
@@ -328,6 +377,41 @@ fun FriendRequestTile(
     name: String,
     onAccept: () -> Unit,
     onReject: () -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(Color.LightGray)
+            .padding(16.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.weight(1f)
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.default_image),
+                contentDescription = null,
+                modifier = Modifier.size(40.dp)
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(text = name, fontSize = 16.sp, color = Color.Black)
+        }
+
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            RequestButton(text = "✓", onClick = onAccept)
+            RequestButton(text = "✕", onClick = onReject)
+        }
+    }
+}
+
+@Composable
+fun GameRequestTile(
+    name: String,
+    onAccept: () -> Unit,
+    onReject: () -> Unit,
 ) {
     Row(
         modifier = Modifier

@@ -82,7 +82,7 @@ class MainActivity : ComponentActivity() {
                     SignupScreen(navController, pikBoardApiViewModel)
                 }
                 composable(Routes.HOME_PAGE) {
-                    HomeScreen(navController, pikBoardApiViewModel)
+                    HomeScreen(navController, sharedViewModel, pikBoardApiViewModel)
                 }
                 composable(Routes.FRIENDS_PAGE) {
                     FriendsScreen()
