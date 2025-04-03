@@ -16,13 +16,13 @@ Chess Companion est une application mobile développée en **Kotlin** avec **Jet
 - **Consultation des parties en cours**
 - **Consultation du profil utilisateur**
 - **Conversion d'une image d'échiquier en FEN**
+- Démarrer une nouvelle partie
+- Consulter l'historique complet des parties
 
 ### Fonctionnalités à venir
-- Démarrer une nouvelle partie
 - Modifier le profil utilisateur
 - Modifier l'image de profil
 - Gérer les coups en temps réel pendant une partie
-- Consulter l'historique complet des parties
 - Terminer une partie
 
 ## Prérequis
