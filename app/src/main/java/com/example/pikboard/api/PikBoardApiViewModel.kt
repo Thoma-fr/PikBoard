@@ -1,6 +1,7 @@
 package com.example.pikboard.api
 
 import android.graphics.Bitmap
+import android.net.Network
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -23,6 +24,7 @@ class PikBoardApiViewModel: ViewModel(){
     val searchUsersResponse = MutableLiveData<NetworkResponse<SearchResponse>>()
     val imageToFenResponse = MutableLiveData<NetworkResponse<FemResponse>>()
     val currentGamesResponse = MutableLiveData<NetworkResponse<CurrentGameResponse>>()
+    var createGameResponse = MutableLiveData<NetworkResponse<Unit>>()
 
     fun login(email:String, password: String) {
         loginResponse.value = NetworkResponse.Loading
@@ -266,6 +268,26 @@ class PikBoardApiViewModel: ViewModel(){
                 }
             } catch (e: Exception) {
                 currentGamesResponse.value = NetworkResponse.Error("Read crash")
+            }
+        }
+    }
+
+    fun createGame(token: String, fen: String, opponentID: Int) {
+        createGameResponse.value = NetworkResponse.Loading
+        viewModelScope.launch {
+            try {
+                val bearerToken = "Bearer $token"
+                Log.i("debug", "$bearerToken, $fen, $opponentID")
+                val response = pikBoardApi.createGame(bearerToken, CreateGameRequest(fen, opponentID))
+                if (response.isSuccessful) {
+                    response.body()?.let {
+                        createGameResponse.value = NetworkResponse.Success(Unit)
+                    }
+                } else {
+                    createGameResponse.value = NetworkResponse.Error("Server error")
+                }
+            } catch (e: Exception) {
+                createGameResponse.value = NetworkResponse.Error("Read crash")
             }
         }
     }

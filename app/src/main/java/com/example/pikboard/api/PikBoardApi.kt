@@ -65,6 +65,11 @@ data class LoginRequest(
     val password: String
 )
 
+data class CreateGameRequest (
+    val fen: String,
+    val opponent_id: Int,
+)
+
 data class SignupRequest(
     val username: String,
     val email: String,
@@ -160,4 +165,10 @@ interface PikBoardApi {
     suspend fun currentGames(
         @Header("Authorization") token: String,
     ): Response<CurrentGameResponse>
+
+    @POST("game/new")
+    suspend fun createGame(
+        @Header("Authorization") token: String,
+        @Body() request: CreateGameRequest
+    ): Response<Unit>
 }
