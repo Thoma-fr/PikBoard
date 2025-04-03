@@ -96,6 +96,7 @@ fun GameFriendSreen(
         is NetworkResponse.Success<*> -> {
             isLoading = false
             navController.navigate(Routes.Game.CHESS)
+            pikBoardApiViewModel.resetCreateGameResponse()
         }
         null -> {}
     }
