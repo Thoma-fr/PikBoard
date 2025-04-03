@@ -94,17 +94,20 @@ fun HomeScreen(navController: NavHostController, pikBoardApiViewModel: PikBoardA
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(2),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-        ) {
-            items(7) { _ ->
-                Tile(name = "isaac", fem = "q7/N7/p2P3B/8/pP1P4/K2kPB2/4bpp1/n7 w - - 0 1", onClick = {
-                    navController.navigate(Routes.Game.CHESS)
-                })
+        if (games != null && games.isNotEmpty()) {
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(2),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+            ) {
+                items(games) { game ->
+                    Tile(name = game.user.username, fem = game.board, onClick = {
+                        navController.navigate(Routes.Game.CHESS)
+                    })
+                }
             }
-        }
-    }
+        } else {
+            Text(text = "You do not have games to continue")
+        }    }
 }
 @Preview(showBackground = true)
 @Composable
