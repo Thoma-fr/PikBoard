@@ -1,5 +1,6 @@
 package com.example.pikboard.ui.screens.game
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -10,6 +11,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Search
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -48,9 +50,11 @@ fun GameFriendSreen(
 ) {
 
     val friendsResponse by pikBoardApiViewModel.friendsResponse.observeAsState()
+    val createGameResponse by pikBoardApiViewModel.createGameResponse.observeAsState()
 
     var friends by remember { mutableStateOf<List<UserApi>>(emptyList()) }
     var isLoading by remember { mutableStateOf(false) }
+    var errorApiMessage by remember { mutableStateOf("") }
 
     val context = LocalContext.current
     val tokenValue by readSessionToken(context).collectAsState(initial = "")
@@ -71,6 +75,7 @@ fun GameFriendSreen(
                 isLoading = false
             }
             is NetworkResponse.Error -> {
+                errorApiMessage = result.message
                 isLoading = false
             }
             NetworkResponse.Loading -> {
@@ -78,6 +83,21 @@ fun GameFriendSreen(
             }
             null -> {}
         }
+    }
+    
+    when(val result = createGameResponse) {
+        is NetworkResponse.Error -> {
+            errorApiMessage = result.message
+            isLoading = false
+        }
+        NetworkResponse.Loading -> {
+            isLoading = true
+        }
+        is NetworkResponse.Success<*> -> {
+            isLoading = false
+            navController.navigate(Routes.Game.CHESS)
+        }
+        null -> {}
     }
 
     Column (
@@ -93,27 +113,38 @@ fun GameFriendSreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-
-        LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            item {
-                Text(
-                    text = "Pending Requests",
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(vertical = 8.dp)
-                )
-            }
-            items(friends) { user ->
-                SearchResultTile(
-                    name = user.username,
-                    {
-                        sharedViewModel.setCurrentOpponent(user)
-                        // TODO: Connect to back end to create new game
-                        navController.navigate(Routes.Game.CHESS)
-                    }
-                )
+        if (isLoading) {
+            CircularProgressIndicator(
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            )
+        } else if (!errorApiMessage.isNullOrBlank()) {
+            Text(text=errorApiMessage)
+        } else {
+            LazyColumn(
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                item {
+                    Text(
+                        text = "Your friends",
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(vertical = 8.dp)
+                    )
+                }
+                items(friends) { user ->
+                    SearchResultTile(
+                        name = user.username,
+                        {
+                            sharedViewModel.setCurrentOpponent(user)
+                            pikBoardApiViewModel.createGame(
+                                token ,
+                                sharedViewModel.pcurrentFen,
+                                user.id
+                            )
+    //                        navController.navigate(Routes.Game.CHESS)
+                        }
+                    )
+                }
             }
         }
 
