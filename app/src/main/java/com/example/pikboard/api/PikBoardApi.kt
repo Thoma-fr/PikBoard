@@ -61,7 +61,15 @@ data class CurrentGame(
     val user: UserApi,
     val opponent: UserApi,
     val board: String,
-    // TODO: Ajouter les status
+    val white_player_id: Int,
+    val status: Status
+)
+
+data class Status (
+    val id: Int,
+    val status: String,
+    val created_at: String,
+    val updated_at: String
 )
 
 data class LoginRequest(
