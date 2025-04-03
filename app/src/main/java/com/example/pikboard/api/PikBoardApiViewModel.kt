@@ -27,6 +27,7 @@ class PikBoardApiViewModel: ViewModel(){
     val imageToFenResponse = MutableLiveData<NetworkResponse<FemResponse>>()
     val currentGamesResponse = MutableLiveData<NetworkResponse<CurrentGameResponse>>()
     val penddingGamesResponse = MutableLiveData<NetworkResponse<PendingGamesResponse>>()
+    val endedGamesResponse = MutableLiveData<NetworkResponse<EndedGameResponse>>()
     var createGameResponse = MutableLiveData<NetworkResponse<Unit>?>()
 
     fun login(email:String, password: String) {
@@ -306,6 +307,25 @@ class PikBoardApiViewModel: ViewModel(){
                 }
             } catch (e: Exception) {
                 penddingGamesResponse.value = NetworkResponse.Error("Read crash")
+            }
+        }
+    }
+
+    fun endedGames(token: String) {
+        endedGamesResponse.value = NetworkResponse.Loading
+        viewModelScope.launch {
+            try {
+                val bearerToken = "Bearer $token"
+                val response = pikBoardApi.endedGames(bearerToken)
+                if (response.isSuccessful) {
+                    response.body()?.let {
+                        endedGamesResponse.value = NetworkResponse.Success(it)
+                    }
+                } else {
+                    endedGamesResponse.value = NetworkResponse.Error("Server error")
+                }
+            } catch (e: Exception) {
+                endedGamesResponse.value = NetworkResponse.Error("Read crash")
             }
         }
     }
