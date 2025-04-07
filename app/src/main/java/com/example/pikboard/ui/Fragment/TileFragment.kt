@@ -28,7 +28,7 @@ fun Tile(name: String="Name",
         ) {
             Text(text = "Adversaire ".plus(name))
 
-            val url ="https://gnat-happy-drake.ngrok-free.app/v1/chess?q="+fem
+            val url ="https://parrot-lucky-partially.ngrok-free.app/v1/chess?q="+fem
             TileImage(url,150.dp)
 
         }

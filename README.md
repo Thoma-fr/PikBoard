@@ -34,7 +34,7 @@ Chess Companion est une application mobile développée en **Kotlin** avec **Jet
 
 ## Configuration du Backend
 
-L'application se connecte à un backend disponible à l'URL suivante : `https://gnat-happy-drake.ngrok-free.app/v1`
+L'application se connecte à un backend disponible à l'URL suivante : `https://parrot-lucky-partially.ngrok-free.app/v1`
 
 Assurez-vous que ce backend est en ligne et accessible pour tester l'ensemble des fonctionnalités de l'application.
 
