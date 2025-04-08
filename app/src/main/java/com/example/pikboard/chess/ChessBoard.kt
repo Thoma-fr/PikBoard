@@ -33,11 +33,12 @@ fun ChessBoard(
     fen: String,
     playerIsWhite: Boolean = true,
     onMove: ((newFen: String) -> Unit)? = null,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    freeMove: Boolean = false
 ) {
     val colorScheme = MaterialTheme.colorScheme
     val isWhiteTurn = extractTurnFromFEN(fen)
-    val isPlayerTurn = isWhiteTurn == playerIsWhite
+    val isPlayerTurn = if (freeMove) true else isWhiteTurn == playerIsWhite
     val gameState = remember(fen) { ChessGameState.fromFEN(fen) }
     
     var pieces by remember(fen) { mutableStateOf(parseFEN(fen)) }
@@ -103,11 +104,11 @@ fun ChessBoard(
                                 val file = (offset.x / squareSize).toInt().coerceIn(0, 7)
                                 val rank = 7 - (offset.y / squareSize).toInt().coerceIn(0, 7)
                                 
-                                selectedPiece = pieces.find { it.position == Pair(file, rank) && it.isWhite == playerIsWhite }
+                                selectedPiece = pieces.find { it.position == Pair(file, rank) && (freeMove || it.isWhite == playerIsWhite) }
                                 if (selectedPiece != null) {
                                     startDragPosition = offset
                                     fingerPosition = offset
-                                    possibleMoves = calculatePossibleMoves(selectedPiece!!, pieces, gameState)
+                                    possibleMoves = if (freeMove) emptyList() else calculatePossibleMoves(selectedPiece!!, pieces, gameState)
                                 } else {
                                     possibleMoves = emptyList()
                                 }
@@ -135,7 +136,7 @@ fun ChessBoard(
                                 val fromPosition = piece.position
                                 val toPosition = Pair(newFile, newRank)
                                 
-                                if (fromPosition != toPosition && possibleMoves.contains(toPosition)) {
+                                if (fromPosition != toPosition && (freeMove || possibleMoves.contains(toPosition))) {
                                     val isEnPassant = piece.type == 'P' && 
                                                     toPosition == gameState.enPassantTarget &&
                                                     fromPosition.first != toPosition.first
@@ -342,7 +343,7 @@ private fun DrawScope.drawPiece(piece: ChessPiece, squareSize: Float, offset: Of
     }
 }
 
-private fun generateFEN(
+fun generateFEN(
     pieces: List<ChessPiece>,
     isWhiteTurn: Boolean,
     gameState: ChessGameState
