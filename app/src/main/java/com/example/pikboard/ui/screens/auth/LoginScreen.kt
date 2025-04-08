@@ -46,7 +46,7 @@ fun LoginScreen(navController: NavHostController, viewModel: PikBoardApiViewMode
     val scope = rememberCoroutineScope()
 
     // INFO: For read app set email = "" and password = ""
-    var email by remember { mutableStateOf("zk1569@gmail.com") }
+    var email by remember { mutableStateOf("zk1555@gmail.com") }
     var password by remember { mutableStateOf("password123") }
 
     var emailError by remember { mutableStateOf("") }
@@ -81,6 +81,8 @@ fun LoginScreen(navController: NavHostController, viewModel: PikBoardApiViewMode
         .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+
+        Spacer(modifier = Modifier.height(24.dp))
 
         Image(
             painter = painterResource(id = R.drawable.default_image),
@@ -127,16 +129,6 @@ fun LoginScreen(navController: NavHostController, viewModel: PikBoardApiViewMode
             }
 
         }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Text(
-            text = "Forgot Password ? ",
-            color = MaterialTheme.colorScheme.primary,
-            modifier = Modifier.clickable {
-                // Handle forgot password logic
-                }
-            )
 
         Spacer( modifier = Modifier.height(50.dp))
 

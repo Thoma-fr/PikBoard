@@ -32,6 +32,7 @@ import com.example.pikboard.ui.theme.PikBoardTheme
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.pikboard.store.SharedImageViewModel
+import com.example.pikboard.ui.screens.EditProfileScreen
 import com.example.pikboard.ui.screens.game.GameFriendSreen
 import com.example.pikboard.ui.screens.game.GamePreviewScreen
 
@@ -88,7 +89,7 @@ class MainActivity : ComponentActivity() {
                     FriendsScreen()
                 }
                 composable(Routes.PROFILE_PAGE) {
-                    ProfilePage(pikBoardApiViewModel)
+                    ProfilePage(navController, pikBoardApiViewModel)
                 }
                 composable(Routes.Game.NEW) {
                     AddGamePage(navController, sharedViewModel)
@@ -101,6 +102,9 @@ class MainActivity : ComponentActivity() {
                 }
                 composable(Routes.Game.FRIEND) {
                     GameFriendSreen(navController, sharedViewModel, pikBoardApiViewModel)
+                }
+                composable(Routes.EDIT_PROFILE) {
+                    EditProfileScreen(navController, sharedViewModel, pikBoardApiViewModel)
                 }
             }
         }

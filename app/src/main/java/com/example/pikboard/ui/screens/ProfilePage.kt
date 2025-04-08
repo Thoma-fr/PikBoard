@@ -28,6 +28,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.pikboard.api.CurrentGame
 import com.example.pikboard.api.NetworkResponse
 import com.example.pikboard.api.PikBoardApiViewModel
@@ -38,7 +40,7 @@ import com.example.pikboard.ui.Fragment.PikButton
 import com.example.pikboard.ui.Fragment.ProfileImage
 
 @Composable
-fun ProfilePage(pikBoardApiViewModel: PikBoardApiViewModel) {
+fun ProfilePage(navController: NavHostController, pikBoardApiViewModel: PikBoardApiViewModel) {
     val context = LocalContext.current
     val token by readSessionToken(context).collectAsState(initial = "")
 
@@ -138,7 +140,9 @@ fun ProfilePage(pikBoardApiViewModel: PikBoardApiViewModel) {
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            PikButton(text = "Edit", false) {  }
+            PikButton(text = "Edit", false) {
+                navController.navigate(Routes.EDIT_PROFILE)
+            }
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -166,5 +170,5 @@ fun ProfilePage(pikBoardApiViewModel: PikBoardApiViewModel) {
 @Preview(showBackground = true)
 @Composable
 fun ProfilePagePreview(){
-    ProfilePage(PikBoardApiViewModel())
+    ProfilePage(rememberNavController(), PikBoardApiViewModel())
 }
