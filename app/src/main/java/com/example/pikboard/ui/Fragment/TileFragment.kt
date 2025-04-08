@@ -3,12 +3,17 @@ package com.example.pikboard.ui.Fragment
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.pikboard.R
@@ -18,19 +23,24 @@ fun Tile(name: String="Name",
          fem: String,
          onClick: () -> Unit)
 {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.clickable { onClick() }
-    )
-    {
+    Surface(
+        modifier = Modifier.padding(horizontal = 8.dp),
+        tonalElevation = 2.dp,
+        shape = MaterialTheme.shapes.large,
+    ) {
         Column(
-            horizontalAlignment = Alignment.Start
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.clickable { onClick() }
         ) {
-            Text(text = "Adversaire ".plus(name))
 
-            val url ="https://parrot-lucky-partially.ngrok-free.app/v1/chess?q="+fem
-            TileImage(url,150.dp)
+            Text(
+                text = "Adversaire $name",
+                modifier = Modifier.fillMaxWidth(),
+                textAlign = TextAlign.Center
+            )
 
+            val url = "https://parrot-lucky-partially.ngrok-free.app/v1/chess?q=$fem"
+            TileImage(url, 150.dp)
         }
     }
 }

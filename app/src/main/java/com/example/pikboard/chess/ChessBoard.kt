@@ -5,6 +5,7 @@ import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.background
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -34,6 +35,7 @@ fun ChessBoard(
     onMove: ((newFen: String) -> Unit)? = null,
     modifier: Modifier = Modifier
 ) {
+    val colorScheme = MaterialTheme.colorScheme
     val isWhiteTurn = extractTurnFromFEN(fen)
     val isPlayerTurn = isWhiteTurn == playerIsWhite
     val gameState = remember(fen) { ChessGameState.fromFEN(fen) }
@@ -196,7 +198,7 @@ fun ChessBoard(
                     val isLightSquare = (i + j) % 2 == 0
                     val position = Pair(i, 7 - j)
                     
-                    val baseColor = if (isLightSquare) Color(0xFFEEEED2) else Color(0xFF769656)
+                    val baseColor = if (isLightSquare) colorScheme.onSurface else colorScheme.primary
                     val color = if (possibleMoves.contains(position)) {
                         if (isLightSquare) Color(0xFFD6F5D6) else Color(0xFF86C086)
                     } else baseColor
