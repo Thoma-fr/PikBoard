@@ -37,5 +37,5 @@ fun Tile(name: String="Name",
 @Preview(showBackground = true)
 @Composable
 fun DisplayTilesPreview() {
-//    Tile(name = "toto", fem = " ", {})
+    Tile(name = "toto", fem = "r1bk3r/p2pBpNp/n4n2/1p1NP2P/6P1/3P4/P1P1K3/q5b1", {})
 }
