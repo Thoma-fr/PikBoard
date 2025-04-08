@@ -1,7 +1,11 @@
 package com.example.pikboard.ui.Fragment
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.AddReaction
@@ -25,22 +29,34 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.pikboard.R
 import com.example.pikboard.ui.screens.Routes
 
 @Composable
 fun PikHeader(modifier: Modifier = Modifier) {
-    Column(modifier = modifier) {
+    Row(modifier = modifier,verticalAlignment = Alignment.CenterVertically) {
         Text(
             text = "PikBoard",
             fontSize = 24.sp,
             fontWeight = FontWeight.ExtraBold
+        )
+
+        Spacer(modifier = Modifier.weight(1f))
+        Image(
+            painter = painterResource(id = R.drawable.applogo),
+            contentDescription = "Logo",
+            modifier = Modifier.size(50
+                .dp)
         )
     }
 }

@@ -15,6 +15,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -28,48 +30,49 @@ import com.example.pikboard.R
 
 @Composable
 fun FriendScore(user_one: String, user_two: String, score_one: String, score_two: String, action: () -> Unit) {
+    Surface( shape = MaterialTheme.shapes.large) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(80.dp)
+                .background(MaterialTheme.colorScheme.primary)
+                .padding(16.dp)
+                .clickable { action() },
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Image(
+                    painter = painterResource(id = R.drawable.chess_icon),
+                    contentDescription = null,
+                    modifier = Modifier.size(50.dp)
+                )
 
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(80.dp)
-            .background(Color.LightGray)
-            .padding(16.dp)
-            .clickable { action() },
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Image(
-                painter = painterResource(id = R.drawable.chess_icon),
-                contentDescription = null,
-                modifier = Modifier.size(50.dp)
-            )
+                Spacer(modifier = Modifier.width(16.dp))
 
-            Spacer(modifier = Modifier.width(16.dp))
+                Column(
+                    modifier = Modifier.width(210.dp)
+                ) {
+                    Text(text = user_one, fontSize = 16.sp, color = MaterialTheme.colorScheme.onPrimary)
+                    Spacer(modifier = Modifier.height(6.dp))
+                    Text(text = user_two, fontSize = 16.sp, color = MaterialTheme.colorScheme.onPrimary)
+                }
 
-            Column(
-                modifier = Modifier.width(210.dp)
-            ) {
-                Text(text = user_one, fontSize = 16.sp, color = Color.Black)
-                Spacer(modifier = Modifier.height(6.dp))
-                Text(text = user_two, fontSize = 16.sp, color = Color.Black)
+                Column {
+                    Text(text = score_one, fontSize = 16.sp, color = MaterialTheme.colorScheme.onPrimary)
+                    Spacer(modifier = Modifier.height(6.dp))
+                    Text(text = score_two, fontSize = 16.sp, color = MaterialTheme.colorScheme.onPrimary)
+                }
+
+                Spacer(modifier = Modifier.width(8.dp))
+
+                Icon(
+                    imageVector = Icons.Default.KeyboardArrowRight,
+                    contentDescription = "Cancel",
+                    tint = MaterialTheme.colorScheme.onPrimary,
+                    modifier = Modifier.size(32.dp)
+                )
             }
-
-            Column {
-                Text(text = score_one, fontSize = 16.sp, color = Color.Black)
-                Spacer(modifier = Modifier.height(6.dp))
-                Text(text = score_two, fontSize = 16.sp, color = Color.Black)
-            }
-
-            Spacer(modifier = Modifier.width(8.dp))
-
-            Icon(
-                imageVector = Icons.Default.KeyboardArrowRight,
-                contentDescription = "Cancel",
-                tint = Color.Black,
-                modifier = Modifier.size(32.dp)
-            )
         }
     }
 }
