@@ -90,19 +90,19 @@ fun AddGamePage( navController: NavController, sharedViewModel: SharedImageViewM
     ) {
         PikHeader(modifier = Modifier.align(Alignment.Start))
 
-        Spacer(modifier = Modifier.height(50.dp))
+        Spacer(modifier = Modifier.height(20.dp))
 
         Text(text="New Game",fontSize = 50.sp,fontWeight = FontWeight.Bold)
-        Spacer(modifier = Modifier.height(50.dp))
+        Spacer(modifier = Modifier.height(20.dp))
         PikBigButton(text="From Scratch") {
             sharedViewModel.setCurrentFenP("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w - - 0 1")
             navController.navigate(Routes.Game.PREVIEW)
         }
-        Spacer(modifier = Modifier.height(50.dp))
+        Spacer(modifier = Modifier.height(18.dp))
         PikBigButton(text="From camera") {
             camPermission.launch(android.Manifest.permission.CAMERA)
         }
-        Spacer(modifier = Modifier.height(50.dp))
+        Spacer(modifier = Modifier.height(18.dp))
         PikBigButton(text="From gallery") {
             photoPermission.launch(android.Manifest.permission.READ_EXTERNAL_STORAGE)
         }
