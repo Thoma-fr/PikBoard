@@ -130,17 +130,10 @@ fun GamePreviewScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        Text(text="Config position",fontSize = 50.sp,fontWeight = FontWeight.Bold)
+        Text(text="Config position",fontSize = 16.sp)
 
         Spacer(modifier = Modifier.height(16.dp))
-        ElevatedCard(
-            elevation = CardDefaults.cardElevation(
-                defaultElevation = 6.dp
-            ),
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(150.dp)
-        ) {
+
         if (!isLoading) {
 
             Box(
@@ -237,7 +230,7 @@ fun GamePreviewScreen(
             CircularProgressIndicator(
                 modifier = Modifier.align(Alignment.CenterHorizontally)
             )
-        }
+
 }
     }
 }
