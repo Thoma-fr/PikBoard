@@ -62,7 +62,16 @@ fun PikBigButton(text: String = "", isLoading: Boolean= false, action: () -> Uni
             modifier = Modifier
                 .fillMaxSize()
         ) {
-            Text(text = "text", textAlign = TextAlign.Center)
+            if (isLoading) {
+                CircularProgressIndicator(
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                    strokeWidth = 2.dp,
+                    modifier = Modifier
+                        .size(20.dp)
+                )
+            } else {
+                Text(text = "text", textAlign = TextAlign.Center)
+            }
         }
     }
 }

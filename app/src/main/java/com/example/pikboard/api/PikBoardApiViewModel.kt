@@ -25,6 +25,7 @@ class PikBoardApiViewModel: ViewModel(){
     val gameRequestResponse = MutableLiveData<NetworkResponse<Unit>>()
     val searchUsersResponse = MutableLiveData<NetworkResponse<SearchResponse>>()
     val imageToFenResponse = MutableLiveData<NetworkResponse<FemResponse>>()
+    val imageProfileResponse = MutableLiveData<NetworkResponse<Unit>?>()
     val currentGamesResponse = MutableLiveData<NetworkResponse<CurrentGameResponse>>()
     val penddingGamesResponse = MutableLiveData<NetworkResponse<PendingGamesResponse>>()
     val endedGamesResponse = MutableLiveData<NetworkResponse<EndedGameResponse>>()
@@ -273,6 +274,25 @@ class PikBoardApiViewModel: ViewModel(){
         }
     }
 
+    fun updateProfileImage(token: String, img: MultipartBody.Part) {
+        imageProfileResponse.value = NetworkResponse.Loading
+        viewModelScope.launch {
+            try {
+                val bearerToken = "Bearer $token"
+                val response = pikBoardApi.updateProfileImage(bearerToken, img)
+                if (response.isSuccessful) {
+                    response.body()?.let {
+                        imageProfileResponse.value = NetworkResponse.Success(Unit)
+                    }
+                } else {
+                    imageProfileResponse.value = NetworkResponse.Error("Server error")
+                }
+            } catch (e: Exception) {
+                imageProfileResponse.value = NetworkResponse.Error("Read crash")
+            }
+        }
+    }
+
     fun currentGame(token: String) {
         currentGamesResponse.value = NetworkResponse.Loading
         viewModelScope.launch {
@@ -352,5 +372,9 @@ class PikBoardApiViewModel: ViewModel(){
 
     fun resetCreateGameResponse() {
         createGameResponse.value = null
+    }
+
+    fun resetUpdateProfileImage() {
+        imageProfileResponse.value = null
     }
 }

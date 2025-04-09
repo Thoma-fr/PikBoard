@@ -184,6 +184,13 @@ interface PikBoardApi {
         @Part img: MultipartBody.Part
     ): Response<FemResponse>
 
+    @Multipart
+    @POST("user/image")
+    suspend fun updateProfileImage(
+        @Header("Authorization") token: String,
+        @Part profile_image: MultipartBody.Part
+    ): Response<Unit>
+
     @GET("game/current")
     suspend fun currentGames(
         @Header("Authorization") token: String,

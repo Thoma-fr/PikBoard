@@ -128,7 +128,6 @@ fun ProfilePage(navController: NavHostController, pikBoardApiViewModel: PikBoard
                         Column {
                             Text(text = "${user!!.username}")
                             Text(text = "${user!!.email}")
-                            Text(text = "${user!!.phone} <- ici aussi todo")
                         }
                     }
                 }
