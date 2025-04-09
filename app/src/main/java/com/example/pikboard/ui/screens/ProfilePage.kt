@@ -165,6 +165,11 @@ fun ProfilePage(navController: NavHostController, pikBoardApiViewModel: PikBoard
                 navController.navigate(Routes.EDIT_PROFILE)
             }
 
+            PikButton(text = "Disconnect", false, Color.Red) {
+                pikBoardApiViewModel.resetLogin()
+                navController.navigate(Routes.Auth.LOGIN_PAGE)
+            }
+
             Spacer(modifier = Modifier.height(16.dp))
 
             Text(text = "History")
