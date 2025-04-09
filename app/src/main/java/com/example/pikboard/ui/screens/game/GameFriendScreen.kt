@@ -135,6 +135,7 @@ fun GameFriendSreen(
                 items(friends) { user ->
                     SearchResultTile(
                         name = user.username,
+                        img = user.image,
                         {
                             sharedViewModel.setCurrentOpponent(user)
                             pikBoardApiViewModel.createGame(

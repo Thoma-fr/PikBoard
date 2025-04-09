@@ -52,6 +52,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import com.example.pikboard.api.CurrentGame
 import com.example.pikboard.store.readSessionToken
+import com.example.pikboard.ui.Fragment.ProfileImage
 
 @Composable
 fun RequestButton(text: String, onClick: () -> Unit) {
@@ -239,6 +240,7 @@ fun FriendsScreen(viewModel: PikBoardApiViewModel = viewModel()) {
                     items(pendingGameRequests) { game ->
                         GameRequestTile(
                             name = game.user.username,
+                            img = game.user.image,
                             onAccept = {
                                 viewModel.acceptGameRequest(token, game.id, true)
                                 pendingGameRequests = pendingGameRequests.filterNot { it.id == game.id }
@@ -324,7 +326,7 @@ fun FriendsList(
                     )
                 }
                 items(searchResults.friends) { user ->
-                    FriendTile(name = user.username)
+                    FriendTile(name = user.username, img = user.image)
                 }
             }
 
@@ -342,6 +344,7 @@ fun FriendsList(
                     if (isNotInPendingRequests) {
                         SearchResultTile(
                             name = user.username,
+                            img = user.image,
                             onSendRequest = { onSendFriendRequest(user.id) }
                         )
                     }
@@ -366,7 +369,7 @@ fun FriendsList(
                     )
                 }
                 items(friends) { user ->
-                    FriendTile(name = user.username)
+                    FriendTile(name = user.username, user.image)
                 }
             }
         }
@@ -411,6 +414,7 @@ fun FriendRequestTile(
 @Composable
 fun GameRequestTile(
     name: String,
+    img: String,
     onAccept: () -> Unit,
     onReject: () -> Unit,
 ) {
@@ -426,11 +430,7 @@ fun GameRequestTile(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.weight(1f)
             ) {
-                Image(
-                    painter = painterResource(id = R.drawable.default_image),
-                    contentDescription = null,
-                    modifier = Modifier.size(40.dp)
-                )
+                ProfileImage(img, 40.dp)
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(text = name, fontSize = 16.sp, color = Color.Black)
             }
@@ -448,6 +448,7 @@ fun GameRequestTile(
 @Composable
 fun SearchResultTile(
     name: String,
+    img: String,
     onSendRequest: () -> Unit
 ) {
     Row(
@@ -459,11 +460,7 @@ fun SearchResultTile(
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Image(
-                painter = painterResource(id = R.drawable.default_image),
-                contentDescription = null,
-                modifier = Modifier.size(40.dp)
-            )
+            ProfileImage(img, 40.dp)
             Spacer(modifier = Modifier.width(8.dp))
             Text(text = name, fontSize = 16.sp, color = Color.Black)
         }
