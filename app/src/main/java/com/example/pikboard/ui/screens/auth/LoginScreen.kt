@@ -85,7 +85,7 @@ fun LoginScreen(navController: NavHostController, viewModel: PikBoardApiViewMode
         Spacer(modifier = Modifier.height(24.dp))
 
         Image(
-            painter = painterResource(id = R.drawable.default_image),
+            painter = painterResource(id = R.drawable.applogo),
             contentDescription = "",
             modifier = Modifier.height(250.dp)
         )

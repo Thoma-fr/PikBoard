@@ -25,7 +25,7 @@ fun Tile(name: String="Name",
 {
     Surface(
         modifier = Modifier.padding(horizontal = 8.dp),
-        tonalElevation = 2.dp,
+        tonalElevation = 3.dp,
         shape = MaterialTheme.shapes.large,
     ) {
         Column(

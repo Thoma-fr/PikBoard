@@ -48,6 +48,8 @@ import com.example.pikboard.ui.Fragment.FriendTile
 import com.example.pikboard.ui.Fragment.PikHeader
 import com.example.pikboard.ui.Fragment.PikTextField
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import com.example.pikboard.api.CurrentGame
 import com.example.pikboard.store.readSessionToken
 
@@ -60,7 +62,7 @@ fun RequestButton(text: String, onClick: () -> Unit) {
             .height(40.dp),
         shape = CircleShape,
         colors = ButtonDefaults.buttonColors(
-            containerColor = Color(0xFFE0E0E0),
+            MaterialTheme.colorScheme.onPrimary,
             contentColor = Color.Black
         ),
         contentPadding = PaddingValues(0.dp)
@@ -274,7 +276,6 @@ fun FriendsScreen(viewModel: PikBoardApiViewModel = viewModel()) {
         }
     }
 }
-
 @Composable
 fun FriendsList(
     friends: List<UserApi>,
@@ -350,7 +351,7 @@ fun FriendsList(
                     Text(
                         text = "No users found",
                         modifier = Modifier.padding(16.dp),
-                        color = Color.Gray
+                        color = MaterialTheme.colorScheme.primary
                     )
                 }
             }
@@ -381,7 +382,7 @@ fun FriendRequestTile(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .background(Color.LightGray)
+            .background(MaterialTheme.colorScheme.primary)
             .padding(16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -390,7 +391,7 @@ fun FriendRequestTile(
             modifier = Modifier.weight(1f)
         ) {
             Image(
-                painter = painterResource(id = R.drawable.default_image),
+                painter = painterResource(id = R.drawable.applogo),
                 contentDescription = null,
                 modifier = Modifier.size(40.dp)
             )
@@ -413,31 +414,33 @@ fun GameRequestTile(
     onAccept: () -> Unit,
     onReject: () -> Unit,
 ) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(Color.LightGray)
-            .padding(16.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
+    Surface(shape = MaterialTheme.shapes.large) {
         Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.weight(1f)
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(MaterialTheme.colorScheme.primary)
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.default_image),
-                contentDescription = null,
-                modifier = Modifier.size(40.dp)
-            )
-            Spacer(modifier = Modifier.width(8.dp))
-            Text(text = name, fontSize = 16.sp, color = Color.Black)
-        }
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.weight(1f)
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.default_image),
+                    contentDescription = null,
+                    modifier = Modifier.size(40.dp)
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(text = name, fontSize = 16.sp, color = Color.Black)
+            }
 
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            RequestButton(text = "✓", onClick = onAccept)
-            RequestButton(text = "✕", onClick = onReject)
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                RequestButton(text = "✓", onClick = onAccept)
+                RequestButton(text = "✕", onClick = onReject)
+            }
         }
     }
 }
@@ -450,7 +453,7 @@ fun SearchResultTile(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .background(Color.LightGray)
+            .background(MaterialTheme.colorScheme.primary)
             .padding(16.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
