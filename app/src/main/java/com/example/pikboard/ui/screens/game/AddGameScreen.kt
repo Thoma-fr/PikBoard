@@ -51,7 +51,6 @@ fun AddGamePage( navController: NavController, sharedViewModel: SharedImageViewM
             sharedViewModel.setImageBitmap(bitmap)
             navController.navigate(Routes.Game.PREVIEW)
         }
-
     }
 
     val cameraLauncher = rememberLauncherForActivityResult(contract = ActivityResultContracts.TakePicturePreview()) {

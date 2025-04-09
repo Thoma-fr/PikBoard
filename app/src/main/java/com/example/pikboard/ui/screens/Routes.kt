@@ -15,4 +15,6 @@ object Routes {
     const val HOME_PAGE = "HOME_PAGE"
     const val PROFILE_PAGE = "PROFILE_PAGE"
     const val FRIENDS_PAGE = "FRIENDS_PAGE"
+
+    const val EDIT_PROFILE = "EDIT_PROFILE"
 }

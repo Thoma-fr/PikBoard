@@ -28,6 +28,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.pikboard.api.CurrentGame
 import com.example.pikboard.api.NetworkResponse
 import com.example.pikboard.api.PikBoardApiViewModel
@@ -36,9 +38,12 @@ import com.example.pikboard.store.readSessionToken
 import com.example.pikboard.ui.Fragment.FriendScore
 import com.example.pikboard.ui.Fragment.PikButton
 import com.example.pikboard.ui.Fragment.ProfileImage
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 @Composable
-fun ProfilePage(pikBoardApiViewModel: PikBoardApiViewModel) {
+fun ProfilePage(navController: NavHostController, pikBoardApiViewModel: PikBoardApiViewModel) {
     val context = LocalContext.current
     val token by readSessionToken(context).collectAsState(initial = "")
 
@@ -126,19 +131,24 @@ fun ProfilePage(pikBoardApiViewModel: PikBoardApiViewModel) {
                         Column {
                             Text(text = "${user!!.username}")
                             Text(text = "${user!!.email}")
-                            Text(text = "${user!!.phone} <- ici aussi todo")
                         }
                     }
                 }
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                Text(text="Registered since ... bahhh todo:")
-            }
+                user?.created_at?.let { createdAtString ->
+                    val parsedDate = ZonedDateTime.parse(createdAtString)
+                    val formatter = DateTimeFormatter.ofPattern("dd MMM yyyy", Locale.ENGLISH)
+                    val formattedDate = parsedDate.format(formatter)
+                    Text(text = "Registered since: $formattedDate")
+                }            }
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            PikButton(text = "Edit", false) {  }
+            PikButton(text = "Edit", false) {
+                navController.navigate(Routes.EDIT_PROFILE)
+            }
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -166,5 +176,5 @@ fun ProfilePage(pikBoardApiViewModel: PikBoardApiViewModel) {
 @Preview(showBackground = true)
 @Composable
 fun ProfilePagePreview(){
-    ProfilePage(PikBoardApiViewModel())
+    ProfilePage(rememberNavController(), PikBoardApiViewModel())
 }
