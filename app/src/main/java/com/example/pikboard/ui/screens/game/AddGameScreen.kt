@@ -36,6 +36,7 @@ import androidx.navigation.compose.rememberNavController
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import com.example.pikboard.store.SharedImageViewModel
+import com.example.pikboard.ui.Fragment.PikBigButton
 import com.example.pikboard.ui.Fragment.PikButton
 import com.example.pikboard.ui.Fragment.PikHeader
 import com.example.pikboard.ui.screens.Routes
@@ -93,16 +94,16 @@ fun AddGamePage( navController: NavController, sharedViewModel: SharedImageViewM
 
         Text(text="New Game",fontSize = 50.sp,fontWeight = FontWeight.Bold)
         Spacer(modifier = Modifier.height(50.dp))
-        PikButton(text="From Scratch") {
+        PikBigButton(text="From Scratch") {
             sharedViewModel.setCurrentFenP("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w - - 0 1")
             navController.navigate(Routes.Game.PREVIEW)
         }
         Spacer(modifier = Modifier.height(50.dp))
-        PikButton(text="From camera") {
+        PikBigButton(text="From camera") {
             camPermission.launch(android.Manifest.permission.CAMERA)
         }
         Spacer(modifier = Modifier.height(50.dp))
-        PikButton(text="From gallery") {
+        PikBigButton(text="From gallery") {
             photoPermission.launch(android.Manifest.permission.READ_EXTERNAL_STORAGE)
         }
 
