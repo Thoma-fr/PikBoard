@@ -99,6 +99,7 @@ fun EditProfileScreen(
         }
         is NetworkResponse.Success -> {
             isUpdatePasswordLoading = false
+            pikBoardApiViewModel.resetUpdatePassword()
             navController.navigate(Routes.PROFILE_PAGE)
         }
         null -> {}
