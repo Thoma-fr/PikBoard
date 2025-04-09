@@ -70,7 +70,7 @@ fun PikBigButton(text: String = "", isLoading: Boolean= false, action: () -> Uni
                         .size(20.dp)
                 )
             } else {
-                Text(text = "text", textAlign = TextAlign.Center)
+                Text(text = text, textAlign = TextAlign.Center)
             }
         }
     }
