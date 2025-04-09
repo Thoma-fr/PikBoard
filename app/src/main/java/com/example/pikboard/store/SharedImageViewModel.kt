@@ -11,7 +11,6 @@ class SharedImageViewModel : ViewModel() {
     var selectedImageBitmap by mutableStateOf<Bitmap?>(null)
         private set
     var pcurrentFen by mutableStateOf<String>("")
-        private set
 
     var currentOpponentChess by mutableStateOf<UserApi?>(null)
         private set
