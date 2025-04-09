@@ -21,7 +21,7 @@ import androidx.compose.material.icons.rounded.Create
 import androidx.compose.material.icons.rounded.Lock
 import androidx.compose.material3.Icon
 @Composable
-fun FriendTile(name: String = "BIBI") {
+fun FriendTile(name: String = "BIBI", img: String) {
     Surface( shape = MaterialTheme.shapes.large) {
     Row(
         modifier = Modifier
@@ -32,11 +32,12 @@ fun FriendTile(name: String = "BIBI") {
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-                Image(
-                    painter = painterResource(id = R.drawable.applogo),
-                    contentDescription = null,
-                    modifier = Modifier.size(40.dp)
-                )
+//                Image(
+//                    painter = painterResource(id = R.drawable.applogo),
+//                    contentDescription = null,
+//                    modifier = Modifier.size(40.dp)
+//                )
+            ProfileImage(img, 40.dp)
             Spacer(modifier = Modifier.width(8.dp))
             Text(text = name, fontSize = 16.sp, color = MaterialTheme.colorScheme.onPrimary)
         }
@@ -47,5 +48,5 @@ fun FriendTile(name: String = "BIBI") {
 @Composable
 @Preview(showBackground = true)
 fun FriendTilePreview() {
-    FriendTile()
+    FriendTile(img="")
 }

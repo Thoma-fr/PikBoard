@@ -48,8 +48,11 @@ import com.example.pikboard.ui.Fragment.FriendTile
 import com.example.pikboard.ui.Fragment.PikHeader
 import com.example.pikboard.ui.Fragment.PikTextField
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import com.example.pikboard.api.CurrentGame
 import com.example.pikboard.store.readSessionToken
+import com.example.pikboard.ui.Fragment.ProfileImage
 
 @Composable
 fun RequestButton(text: String, onClick: () -> Unit) {
@@ -60,7 +63,7 @@ fun RequestButton(text: String, onClick: () -> Unit) {
             .height(40.dp),
         shape = CircleShape,
         colors = ButtonDefaults.buttonColors(
-            containerColor = Color(0xFFE0E0E0),
+            MaterialTheme.colorScheme.onPrimary,
             contentColor = Color.Black
         ),
         contentPadding = PaddingValues(0.dp)
@@ -237,6 +240,7 @@ fun FriendsScreen(viewModel: PikBoardApiViewModel = viewModel()) {
                     items(pendingGameRequests) { game ->
                         GameRequestTile(
                             name = game.user.username,
+                            img = game.user.image,
                             onAccept = {
                                 viewModel.acceptGameRequest(token, game.id, true)
                                 pendingGameRequests = pendingGameRequests.filterNot { it.id == game.id }
@@ -274,7 +278,6 @@ fun FriendsScreen(viewModel: PikBoardApiViewModel = viewModel()) {
         }
     }
 }
-
 @Composable
 fun FriendsList(
     friends: List<UserApi>,
@@ -323,7 +326,7 @@ fun FriendsList(
                     )
                 }
                 items(searchResults.friends) { user ->
-                    FriendTile(name = user.username)
+                    FriendTile(name = user.username, img = user.image)
                 }
             }
 
@@ -341,6 +344,7 @@ fun FriendsList(
                     if (isNotInPendingRequests) {
                         SearchResultTile(
                             name = user.username,
+                            img = user.image,
                             onSendRequest = { onSendFriendRequest(user.id) }
                         )
                     }
@@ -350,7 +354,7 @@ fun FriendsList(
                     Text(
                         text = "No users found",
                         modifier = Modifier.padding(16.dp),
-                        color = Color.Gray
+                        color = MaterialTheme.colorScheme.primary
                     )
                 }
             }
@@ -365,7 +369,7 @@ fun FriendsList(
                     )
                 }
                 items(friends) { user ->
-                    FriendTile(name = user.username)
+                    FriendTile(name = user.username, user.image)
                 }
             }
         }
@@ -381,7 +385,7 @@ fun FriendRequestTile(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .background(Color.LightGray)
+            .background(MaterialTheme.colorScheme.primary)
             .padding(16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -390,7 +394,7 @@ fun FriendRequestTile(
             modifier = Modifier.weight(1f)
         ) {
             Image(
-                painter = painterResource(id = R.drawable.default_image),
+                painter = painterResource(id = R.drawable.applogo),
                 contentDescription = null,
                 modifier = Modifier.size(40.dp)
             )
@@ -410,34 +414,33 @@ fun FriendRequestTile(
 @Composable
 fun GameRequestTile(
     name: String,
+    img: String,
     onAccept: () -> Unit,
     onReject: () -> Unit,
 ) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(Color.LightGray)
-            .padding(16.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
+    Surface(shape = MaterialTheme.shapes.large) {
         Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.weight(1f)
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(MaterialTheme.colorScheme.primary)
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.default_image),
-                contentDescription = null,
-                modifier = Modifier.size(40.dp)
-            )
-            Spacer(modifier = Modifier.width(8.dp))
-            Text(text = name, fontSize = 16.sp, color = Color.Black)
-        }
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.weight(1f)
+            ) {
+                ProfileImage(img, 40.dp)
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(text = name, fontSize = 16.sp, color = Color.Black)
+            }
 
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            RequestButton(text = "✓", onClick = onAccept)
-            RequestButton(text = "✕", onClick = onReject)
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                RequestButton(text = "✓", onClick = onAccept)
+                RequestButton(text = "✕", onClick = onReject)
+            }
         }
     }
 }
@@ -445,22 +448,19 @@ fun GameRequestTile(
 @Composable
 fun SearchResultTile(
     name: String,
+    img: String,
     onSendRequest: () -> Unit
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .background(Color.LightGray)
+            .background(MaterialTheme.colorScheme.primary)
             .padding(16.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Image(
-                painter = painterResource(id = R.drawable.default_image),
-                contentDescription = null,
-                modifier = Modifier.size(40.dp)
-            )
+            ProfileImage(img, 40.dp)
             Spacer(modifier = Modifier.width(8.dp))
             Text(text = name, fontSize = 16.sp, color = Color.Black)
         }

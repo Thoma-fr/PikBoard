@@ -126,8 +126,8 @@ fun GameFriendSreen(
             ) {
                 item {
                     Text(
-                        text = "Your friends",
-                        fontSize = 20.sp,
+                        text = "Invite a friend to play",
+                        fontSize = 30.sp,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.padding(vertical = 8.dp)
                     )
@@ -135,6 +135,7 @@ fun GameFriendSreen(
                 items(friends) { user ->
                     SearchResultTile(
                         name = user.username,
+                        img = user.image,
                         {
                             sharedViewModel.setCurrentOpponent(user)
                             pikBoardApiViewModel.createGame(

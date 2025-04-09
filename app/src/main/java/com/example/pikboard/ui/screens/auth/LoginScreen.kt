@@ -2,6 +2,7 @@ package com.example.pikboard.ui.screens.auth
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -46,7 +47,7 @@ fun LoginScreen(navController: NavHostController, viewModel: PikBoardApiViewMode
     val scope = rememberCoroutineScope()
 
     // INFO: For read app set email = "" and password = ""
-    var email by remember { mutableStateOf("zk1569@gmail.com") }
+    var email by remember { mutableStateOf("zk1555@gmail.com") }
     var password by remember { mutableStateOf("password123") }
 
     var emailError by remember { mutableStateOf("") }
@@ -82,12 +83,20 @@ fun LoginScreen(navController: NavHostController, viewModel: PikBoardApiViewMode
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
+        Spacer(modifier = Modifier.height(24.dp))
+
+        val isDarkTheme = isSystemInDarkTheme()
+        val logo = if (isDarkTheme) {
+            painterResource(id = R.drawable.logo_pikboard_white)
+        } else {
+            painterResource(id = R.drawable.logo_pikboard_dark)
+        }
+
         Image(
-            painter = painterResource(id = R.drawable.default_image),
-            contentDescription = "",
+            painter = logo,
+            contentDescription = "PikBoard logo",
             modifier = Modifier.height(250.dp)
         )
-
         Spacer(modifier = Modifier.height(24.dp))
 
         Text(text = "Login", fontSize = 24.sp, fontWeight = FontWeight.ExtraBold)
@@ -127,16 +136,6 @@ fun LoginScreen(navController: NavHostController, viewModel: PikBoardApiViewMode
             }
 
         }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Text(
-            text = "Forgot Password ? ",
-            color = MaterialTheme.colorScheme.primary,
-            modifier = Modifier.clickable {
-                // Handle forgot password logic
-                }
-            )
 
         Spacer( modifier = Modifier.height(50.dp))
 

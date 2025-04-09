@@ -24,8 +24,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -33,6 +36,7 @@ import androidx.navigation.compose.rememberNavController
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import com.example.pikboard.store.SharedImageViewModel
+import com.example.pikboard.ui.Fragment.PikBigButton
 import com.example.pikboard.ui.Fragment.PikButton
 import com.example.pikboard.ui.Fragment.PikHeader
 import com.example.pikboard.ui.screens.Routes
@@ -51,7 +55,6 @@ fun AddGamePage( navController: NavController, sharedViewModel: SharedImageViewM
             sharedViewModel.setImageBitmap(bitmap)
             navController.navigate(Routes.Game.PREVIEW)
         }
-
     }
 
     val cameraLauncher = rememberLauncherForActivityResult(contract = ActivityResultContracts.TakePicturePreview()) {
@@ -87,18 +90,20 @@ fun AddGamePage( navController: NavController, sharedViewModel: SharedImageViewM
     ) {
         PikHeader(modifier = Modifier.align(Alignment.Start))
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(20.dp))
 
-        Text(text="New Game")
-
-        PikButton(text="From Scratch") {
+        Text(text="New Game",fontSize = 50.sp,fontWeight = FontWeight.Bold)
+        Spacer(modifier = Modifier.height(20.dp))
+        PikBigButton(text="From Scratch") {
             sharedViewModel.setCurrentFenP("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w - - 0 1")
             navController.navigate(Routes.Game.PREVIEW)
         }
-        PikButton(text="From camera") {
+        Spacer(modifier = Modifier.height(18.dp))
+        PikBigButton(text="From camera") {
             camPermission.launch(android.Manifest.permission.CAMERA)
         }
-        PikButton(text="From gallery") {
+        Spacer(modifier = Modifier.height(18.dp))
+        PikBigButton(text="From gallery") {
             photoPermission.launch(android.Manifest.permission.READ_EXTERNAL_STORAGE)
         }
 
