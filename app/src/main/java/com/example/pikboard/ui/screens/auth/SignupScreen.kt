@@ -14,10 +14,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -27,13 +29,18 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.pikboard.api.NetworkResponse
 import com.example.pikboard.api.PikBoardApiViewModel
+import com.example.pikboard.store.saveSessionToken
 import com.example.pikboard.ui.Fragment.PikButton
 import com.example.pikboard.ui.Fragment.PikPasswordField
 import com.example.pikboard.ui.Fragment.PikTextField
 import com.example.pikboard.ui.screens.Routes
+import kotlinx.coroutines.launch
 
 @Composable
 fun SignupScreen(navController: NavHostController, pikBoardApiViewModel: PikBoardApiViewModel) {
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+
     var username by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -44,6 +51,7 @@ fun SignupScreen(navController: NavHostController, pikBoardApiViewModel: PikBoar
     var isSignupApiCallLoading by remember { mutableStateOf(false) }
 
     val signupResult = pikBoardApiViewModel.signupResponse.observeAsState()
+    val loginResult = pikBoardApiViewModel.loginResponse.observeAsState()
 
     when(val result = signupResult.value) {
         is NetworkResponse.Error -> {
@@ -54,11 +62,31 @@ fun SignupScreen(navController: NavHostController, pikBoardApiViewModel: PikBoar
             isSignupApiCallLoading = true
         }
         is NetworkResponse.Success -> {
-            isSignupApiCallLoading = false
-            navController.navigate(Routes.Auth.LOGIN_PAGE)
+            pikBoardApiViewModel.resetSignup()
+            pikBoardApiViewModel.login(email, password)
         }
         null -> {}
     }
+
+    when(val result = loginResult.value) {
+        is NetworkResponse.Error -> {
+            apiErrorMessage = result.message
+            isSignupApiCallLoading = false
+        }
+        NetworkResponse.Loading -> {
+            isSignupApiCallLoading = true
+        }
+        is NetworkResponse.Success -> {
+            isSignupApiCallLoading = false
+            scope.launch {
+                saveSessionToken(context, result.data.data.token)
+            }
+
+            navController.navigate(Routes.HOME_PAGE)
+        }
+        null -> {}
+    }
+
 
     Column (modifier = Modifier
         .fillMaxSize(),

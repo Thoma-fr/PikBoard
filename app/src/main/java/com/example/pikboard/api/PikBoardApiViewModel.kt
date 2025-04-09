@@ -15,7 +15,7 @@ class PikBoardApiViewModel: ViewModel(){
 
     private val pikBoardApi = RetrofitInstance.pikBoardApi
     val loginResponse = MutableLiveData<NetworkResponse<LoginResponse>>()
-    val signupResponse = MutableLiveData<NetworkResponse<Unit>>()
+    val signupResponse = MutableLiveData<NetworkResponse<Unit>?>()
     val userFromSessionTokenResponse = MutableLiveData<NetworkResponse<UserResponse>>()
     val fenToImageResponse = MutableLiveData<NetworkResponse<FenToImageResponse>>()
     val friendsResponse = MutableLiveData<NetworkResponse<FriendsResponse>>()
@@ -399,5 +399,9 @@ class PikBoardApiViewModel: ViewModel(){
 
     fun resetUpdatePassword() {
         updatePasswordResponse.value = null
+    }
+
+    fun resetSignup() {
+        signupResponse.value = null
     }
 }
