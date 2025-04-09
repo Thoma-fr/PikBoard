@@ -89,7 +89,7 @@ class MainActivity : ComponentActivity() {
                     FriendsScreen()
                 }
                 composable(Routes.PROFILE_PAGE) {
-                    ProfilePage(navController, pikBoardApiViewModel)
+                    ProfilePage(navController, sharedViewModel, pikBoardApiViewModel)
                 }
                 composable(Routes.Game.NEW) {
                     AddGamePage(navController, sharedViewModel)

@@ -24,7 +24,7 @@ class PikBoardApiViewModel: ViewModel(){
     val friendRequestResponse = MutableLiveData<NetworkResponse<Unit>>()
     val gameRequestResponse = MutableLiveData<NetworkResponse<Unit>>()
     val searchUsersResponse = MutableLiveData<NetworkResponse<SearchResponse>>()
-    val imageToFenResponse = MutableLiveData<NetworkResponse<FemResponse>>()
+    val imageToFenResponse = MutableLiveData<NetworkResponse<FemResponse>?>()
     val imageProfileResponse = MutableLiveData<NetworkResponse<Unit>?>()
     val currentGamesResponse = MutableLiveData<NetworkResponse<CurrentGameResponse>>()
     val penddingGamesResponse = MutableLiveData<NetworkResponse<PendingGamesResponse>>()
@@ -407,5 +407,9 @@ class PikBoardApiViewModel: ViewModel(){
 
     fun resetLogin() {
         loginResponse.value = null
+    }
+
+    fun clearImageToFemResponse() {
+        imageToFenResponse.value = null
     }
 }
