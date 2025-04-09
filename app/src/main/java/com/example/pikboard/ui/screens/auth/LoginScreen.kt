@@ -2,6 +2,7 @@ package com.example.pikboard.ui.screens.auth
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -84,12 +85,18 @@ fun LoginScreen(navController: NavHostController, viewModel: PikBoardApiViewMode
 
         Spacer(modifier = Modifier.height(24.dp))
 
+        val isDarkTheme = isSystemInDarkTheme()
+        val logo = if (isDarkTheme) {
+            painterResource(id = R.drawable.logo_pikboard_white)
+        } else {
+            painterResource(id = R.drawable.logo_pikboard_dark)
+        }
+
         Image(
-            painter = painterResource(id = R.drawable.applogo),
-            contentDescription = "",
+            painter = logo,
+            contentDescription = "PikBoard logo",
             modifier = Modifier.height(250.dp)
         )
-
         Spacer(modifier = Modifier.height(24.dp))
 
         Text(text = "Login", fontSize = 24.sp, fontWeight = FontWeight.ExtraBold)
