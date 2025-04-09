@@ -14,7 +14,7 @@ import retrofit2.http.Multipart
 class PikBoardApiViewModel: ViewModel(){
 
     private val pikBoardApi = RetrofitInstance.pikBoardApi
-    val loginResponse = MutableLiveData<NetworkResponse<LoginResponse>>()
+    val loginResponse = MutableLiveData<NetworkResponse<LoginResponse>?>()
     val signupResponse = MutableLiveData<NetworkResponse<Unit>?>()
     val userFromSessionTokenResponse = MutableLiveData<NetworkResponse<UserResponse>>()
     val fenToImageResponse = MutableLiveData<NetworkResponse<FenToImageResponse>>()
@@ -403,5 +403,9 @@ class PikBoardApiViewModel: ViewModel(){
 
     fun resetSignup() {
         signupResponse.value = null
+    }
+
+    fun resetLogin() {
+        loginResponse.value = null
     }
 }
