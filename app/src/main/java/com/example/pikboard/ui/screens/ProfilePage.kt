@@ -12,7 +12,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -28,6 +32,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.pikboard.api.CurrentGame
@@ -118,31 +123,41 @@ fun ProfilePage(navController: NavHostController, pikBoardApiViewModel: PikBoard
                 modifier = Modifier.fillMaxWidth()
             ) {
                 if (user != null) {
-                Row(
-                ) {
-                    ProfileImage(
-                        url = user!!.image,
+                    ElevatedCard(
+                        elevation = CardDefaults.cardElevation(
+                            defaultElevation = 6.dp
+                        ),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(150.dp)
+                    ) {
+                        Row(
+                        ) {
+                            ProfileImage(
+                                url = user!!.image,
 
-                        150.dp
-                    )
+                                150.dp
+                            )
 
-                    Spacer(modifier = Modifier.width(8.dp))
+                            Spacer(modifier = Modifier.width(8.dp))
 
-                        Column {
-                            Text(text = "${user!!.username}")
-                            Text(text = "${user!!.email}")
+                            Column {
+                                Text(text = "${user!!.username}")
+                                Text(text = "${user!!.email}")
+
+                                Spacer(modifier = Modifier.height(20.dp))
+
+                                user?.created_at?.let { createdAtString ->
+                                    val parsedDate = ZonedDateTime.parse(createdAtString)
+                                    val formatter = DateTimeFormatter.ofPattern("dd MMM yyyy", Locale.ENGLISH)
+                                    val formattedDate = parsedDate.format(formatter)
+                                    Text(text = "Registered since: $formattedDate", fontSize = 12.sp)
+                                }
+                            }
                         }
                     }
                 }
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                user?.created_at?.let { createdAtString ->
-                    val parsedDate = ZonedDateTime.parse(createdAtString)
-                    val formatter = DateTimeFormatter.ofPattern("dd MMM yyyy", Locale.ENGLISH)
-                    val formattedDate = parsedDate.format(formatter)
-                    Text(text = "Registered since: $formattedDate")
-                }            }
+            }
 
             Spacer(modifier = Modifier.height(8.dp))
 

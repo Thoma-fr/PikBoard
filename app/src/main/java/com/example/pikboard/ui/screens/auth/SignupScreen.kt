@@ -67,9 +67,11 @@ fun SignupScreen(navController: NavHostController, pikBoardApiViewModel: PikBoar
 
 
         Text(text = "Welcome", fontSize = 24.sp, fontWeight = FontWeight.ExtraBold)
-
+        Text(text = "to", fontSize = 24.sp, fontWeight = FontWeight.ExtraBold)
+        Text(text = "PIKBOARD", fontSize = 50.sp, fontWeight = FontWeight.ExtraBold)
         Spacer(modifier = Modifier.height(24.dp))
-
+        Text(text = "Enter your information", fontSize = 15.sp)
+        Spacer(modifier = Modifier.height(10.dp))
         PikTextField(
             value = username,
             onValueChange = {username = it},
