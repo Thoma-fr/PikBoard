@@ -101,6 +101,7 @@ fun GamePreviewScreen(
                 apiCallMade = true
             } else {
                 fen = sharedViewModel.pcurrentFen
+                sharedViewModel.setCurrentFenP(fen)
             }
         }
     }
@@ -115,6 +116,8 @@ fun GamePreviewScreen(
         }
         is NetworkResponse.Success -> {
             fen = result.data.data
+            sharedViewModel.setCurrentFenP(fen)
+            pikBoardApiViewModel.clearImageToFemResponse()
             isLoading = false
         }
         null -> {}
@@ -200,6 +203,7 @@ fun GamePreviewScreen(
             Spacer(modifier = Modifier.height(12.dp))
 
             PikButton("Validate"){
+                fen = sharedViewModel.pcurrentFen
                 val currentPieces = parseFEN(fen)
                 val currentGameState = ChessGameState.fromFEN(fen)
 

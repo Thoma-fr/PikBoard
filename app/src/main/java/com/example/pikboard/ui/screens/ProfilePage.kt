@@ -12,11 +12,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedCard
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -33,12 +31,14 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.pikboard.api.CurrentGame
 import com.example.pikboard.api.NetworkResponse
 import com.example.pikboard.api.PikBoardApiViewModel
 import com.example.pikboard.api.UserApi
+import com.example.pikboard.store.SharedImageViewModel
 import com.example.pikboard.store.readSessionToken
 import com.example.pikboard.ui.Fragment.FriendScore
 import com.example.pikboard.ui.Fragment.PikButton
@@ -48,7 +48,11 @@ import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 @Composable
-fun ProfilePage(navController: NavHostController, pikBoardApiViewModel: PikBoardApiViewModel) {
+fun ProfilePage(
+    navController: NavHostController,
+    sharedViewModel: SharedImageViewModel,
+    pikBoardApiViewModel: PikBoardApiViewModel
+) {
     val context = LocalContext.current
     val token by readSessionToken(context).collectAsState(initial = "")
 
@@ -186,7 +190,10 @@ fun ProfilePage(navController: NavHostController, pikBoardApiViewModel: PikBoard
                         game.opponent.username,
                         "",
                         ""
-                    ) {}
+                    ) {
+                        sharedViewModel.setCurrentFenP(game.board)
+                        navController.navigate(Routes.Game.CHESS)
+                    }
                 }
             }
         }
@@ -196,5 +203,5 @@ fun ProfilePage(navController: NavHostController, pikBoardApiViewModel: PikBoard
 @Preview(showBackground = true)
 @Composable
 fun ProfilePagePreview(){
-    ProfilePage(rememberNavController(), PikBoardApiViewModel())
+    ProfilePage(rememberNavController(), viewModel(), PikBoardApiViewModel())
 }
