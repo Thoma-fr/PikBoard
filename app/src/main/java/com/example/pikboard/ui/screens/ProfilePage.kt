@@ -38,6 +38,9 @@ import com.example.pikboard.store.readSessionToken
 import com.example.pikboard.ui.Fragment.FriendScore
 import com.example.pikboard.ui.Fragment.PikButton
 import com.example.pikboard.ui.Fragment.ProfileImage
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 @Composable
 fun ProfilePage(navController: NavHostController, pikBoardApiViewModel: PikBoardApiViewModel) {
@@ -134,8 +137,12 @@ fun ProfilePage(navController: NavHostController, pikBoardApiViewModel: PikBoard
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                Text(text="Registered since ... bahhh todo:")
-            }
+                user?.created_at?.let { createdAtString ->
+                    val parsedDate = ZonedDateTime.parse(createdAtString)
+                    val formatter = DateTimeFormatter.ofPattern("dd MMM yyyy", Locale.ENGLISH)
+                    val formattedDate = parsedDate.format(formatter)
+                    Text(text = "Registered since: $formattedDate")
+                }            }
 
             Spacer(modifier = Modifier.height(8.dp))
 
