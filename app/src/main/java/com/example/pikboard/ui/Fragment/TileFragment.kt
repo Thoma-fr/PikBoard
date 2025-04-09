@@ -39,7 +39,7 @@ fun Tile(name: String="Name",
                 textAlign = TextAlign.Center
             )
 
-            val url = "https://parrot-lucky-partially.ngrok-free.app/v1/chess?q=$fem"
+            val url = "https://pikboard.ngrok.app/v1/chess?q=$fem"
             TileImage(url, 150.dp)
         }
     }
