@@ -30,6 +30,7 @@ class PikBoardApiViewModel: ViewModel(){
     val penddingGamesResponse = MutableLiveData<NetworkResponse<PendingGamesResponse>>()
     val endedGamesResponse = MutableLiveData<NetworkResponse<EndedGameResponse>>()
     var createGameResponse = MutableLiveData<NetworkResponse<Unit>?>()
+    var updatePasswordResponse = MutableLiveData<NetworkResponse<Unit>?>()
 
     fun login(email:String, password: String) {
         loginResponse.value = NetworkResponse.Loading
@@ -355,7 +356,6 @@ class PikBoardApiViewModel: ViewModel(){
         viewModelScope.launch {
             try {
                 val bearerToken = "Bearer $token"
-                Log.i("debug", "$bearerToken, $fen, $opponentID")
                 val response = pikBoardApi.createGame(bearerToken, CreateGameRequest(fen, opponentID))
                 if (response.isSuccessful) {
                     response.body()?.let {
@@ -370,11 +370,34 @@ class PikBoardApiViewModel: ViewModel(){
         }
     }
 
+    fun updatePassword(token: String, oldPassword: String, newPassword: String) {
+        updatePasswordResponse.value = NetworkResponse.Loading
+        viewModelScope.launch {
+            try {
+                val bearerToken = "Bearer $token"
+                val response = pikBoardApi.updatePassword(bearerToken, UpdatePassword(oldPassword, newPassword))
+                if (response.isSuccessful) {
+                    response.body()?.let {
+                        imageProfileResponse.value = NetworkResponse.Success(Unit)
+                    }
+                } else {
+                    updatePasswordResponse.value = NetworkResponse.Error("Server error")
+                }
+            } catch (e: Exception) {
+                updatePasswordResponse.value = NetworkResponse.Error("Read crash")
+            }
+        }
+    }
+
     fun resetCreateGameResponse() {
         createGameResponse.value = null
     }
 
     fun resetUpdateProfileImage() {
         imageProfileResponse.value = null
+    }
+
+    fun resetUpdatePassword() {
+        updatePasswordResponse.value = null
     }
 }

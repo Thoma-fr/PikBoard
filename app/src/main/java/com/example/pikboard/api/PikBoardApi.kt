@@ -12,6 +12,7 @@ import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Multipart
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Part
 import retrofit2.http.Query
 import java.io.ByteArrayOutputStream
@@ -79,6 +80,11 @@ data class Status (
 data class LoginRequest(
     val email: String,
     val password: String
+)
+
+data class UpdatePassword(
+    val old_password: String,
+    val new_password: String
 )
 
 data class CreateGameRequest (
@@ -189,6 +195,12 @@ interface PikBoardApi {
     suspend fun updateProfileImage(
         @Header("Authorization") token: String,
         @Part profile_image: MultipartBody.Part
+    ): Response<Unit>
+
+    @PUT("user/password")
+    suspend fun updatePassword(
+        @Header("Authorization") token: String,
+        @Body password: UpdatePassword
     ): Response<Unit>
 
     @GET("game/current")

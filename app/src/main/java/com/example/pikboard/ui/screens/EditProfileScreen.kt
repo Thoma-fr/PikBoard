@@ -38,6 +38,8 @@ import com.example.pikboard.store.readSessionToken
 import com.example.pikboard.ui.Fragment.PikBigButton
 import com.example.pikboard.ui.Fragment.PikButton
 import com.example.pikboard.ui.Fragment.PikHeader
+import com.example.pikboard.ui.Fragment.PikPasswordField
+import com.example.pikboard.ui.Fragment.PikPasswordFieldPreview
 import com.example.pikboard.ui.Fragment.PikTextField
 
 @Composable
@@ -49,7 +51,9 @@ fun EditProfileScreen(
     var oldPassword by remember { mutableStateOf("") }
     var newPassword by remember { mutableStateOf("") }
     var isNewImageLoading by remember { mutableStateOf(false) }
+    var isUpdatePasswordLoading by remember { mutableStateOf(false) }
     var errorApiUpdateImageMessage by remember { mutableStateOf("") }
+    var errorApiUpdatePasswordMessage by remember { mutableStateOf("") }
 
     val context = LocalContext.current
     val token by readSessionToken(context).collectAsState(initial = "")
@@ -68,6 +72,7 @@ fun EditProfileScreen(
     }
 
     val gameResult = pikBoardApiViewModel.imageProfileResponse.observeAsState()
+    val updatePasswordResult = pikBoardApiViewModel.updatePasswordResponse.observeAsState()
 
     when(val result = gameResult.value) {
         is NetworkResponse.Error -> {
@@ -80,6 +85,21 @@ fun EditProfileScreen(
         is NetworkResponse.Success -> {
             navController.navigate(Routes.PROFILE_PAGE)
             pikBoardApiViewModel.resetUpdateProfileImage()
+        }
+        null -> {}
+    }
+
+    when(val result = updatePasswordResult.value) {
+        is NetworkResponse.Error -> {
+            errorApiUpdatePasswordMessage = result.message
+            isUpdatePasswordLoading = false
+        }
+        NetworkResponse.Loading -> {
+            isUpdatePasswordLoading = true
+        }
+        is NetworkResponse.Success -> {
+            isUpdatePasswordLoading = false
+            navController.navigate(Routes.PROFILE_PAGE)
         }
         null -> {}
     }
@@ -111,7 +131,6 @@ fun EditProfileScreen(
         if (errorApiUpdateImageMessage.isNotBlank()) {
             Spacer(modifier = Modifier.height(16.dp))
             Text(text = errorApiUpdateImageMessage, fontSize = 16.sp, color = Color.Red)
-
         }
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -120,7 +139,7 @@ fun EditProfileScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        PikTextField(
+        PikPasswordField(
             value = oldPassword,
             onValueChange = { oldPassword = it },
             hint = "Old Password...",
@@ -128,15 +147,27 @@ fun EditProfileScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        PikTextField(
+        PikPasswordField(
             value = newPassword,
             onValueChange = { newPassword = it },
             hint = "New Password...",
         )
 
+        if (errorApiUpdatePasswordMessage.isNotBlank()) {
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(text = errorApiUpdateImageMessage, fontSize = 16.sp, color = Color.Red)
+        }
+
         Spacer(modifier = Modifier.height(8.dp))
 
-        PikButton(text="Update password") {  }
+        PikButton(text="Update password", isUpdatePasswordLoading) {
+            if (oldPassword.isNotBlank() && newPassword.isNotBlank()){
+                pikBoardApiViewModel.updatePassword(token as String,oldPassword,newPassword)
+            } else {
+                errorApiUpdatePasswordMessage = "Old and New password are mandatory"
+            }
+        }
+
     }
 }
 
