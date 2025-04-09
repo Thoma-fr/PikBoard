@@ -13,7 +13,7 @@ object ChessPieceDrawer {
     }
 
     // Caractères Unicode pleins
-    private val pieceCharsFilled = mapOf(
+    val pieceCharsFilled = mapOf(
         'K' to "♚",
         'Q' to "♛",
         'R' to "♜",
@@ -23,7 +23,7 @@ object ChessPieceDrawer {
     )
 
     // Caractères Unicode non pleins
-    private val pieceCharsOutline = mapOf(
+    val pieceCharsOutline = mapOf(
         'K' to "♔",
         'Q' to "♕",
         'R' to "♖",
