@@ -118,70 +118,99 @@ fun ChessBoard(
                             if (selectedPiece != null) {
                                 dragOffset += dragAmount
                                 fingerPosition += dragAmount
-                                
-                                val boardSize = size.width.toFloat()
-                                fingerPosition = Offset(
-                                    x = fingerPosition.x.coerceIn(0f, boardSize),
-                                    y = fingerPosition.y.coerceIn(0f, boardSize)
-                                )
+                                change.consume()
                             }
                         },
                         onDragEnd = { 
                             selectedPiece?.let { piece ->
                                 val squareSize = size.width.toFloat() / 8f
-                                
-                                val newFile = (fingerPosition.x / squareSize).toInt().coerceIn(0, 7)
-                                val newRank = 7 - (fingerPosition.y / squareSize).toInt().coerceIn(0, 7)
-                                
-                                val fromPosition = piece.position
-                                val toPosition = Pair(newFile, newRank)
-                                
-                                if (fromPosition != toPosition && (freeMove || possibleMoves.contains(toPosition))) {
-                                    val isEnPassant = piece.type == 'P' && 
-                                                    toPosition == gameState.enPassantTarget &&
-                                                    fromPosition.first != toPosition.first
+                                val boardWidth = size.width.toFloat()
+                                val boardHeight = size.height.toFloat()
+
+                                // Vérifier si le doigt est hors du plateau à la fin du drag
+                                val isOutsideBoard = fingerPosition.x < 0 || fingerPosition.x >= boardWidth ||
+                                                    fingerPosition.y < 0 || fingerPosition.y >= boardHeight
+
+                                if (freeMove && isOutsideBoard) {
+                                    // Mode libre et pièce glissée hors du plateau : supprimer la pièce
+                                    val updatedPieces = pieces.filterNot { it == piece }
+                                    pieces = updatedPieces
                                     
-                                    val capturedPawnPos = if (isEnPassant) {
-                                        Pair(toPosition.first, fromPosition.second)
-                                    } else null
+                                    // Générer le nouveau FEN sans la pièce
+                                    val updatedGameState = gameState // L'état du jeu ne change pas vraiment en mode setup
+                                    val newFen = generateFEN(updatedPieces, isWhiteTurn, updatedGameState)
+                                    onMove?.invoke(newFen)
+                                } else {
+                                    // Logique existante pour placer la pièce sur une case (ou la remettre si invalide)
+                                    val newFile = (fingerPosition.x / squareSize).toInt().coerceIn(0, 7)
+                                    val newRank = 7 - (fingerPosition.y / squareSize).toInt().coerceIn(0, 7)
                                     
-                                    val isCastling = piece.type == 'K' && Math.abs(toPosition.first - fromPosition.first) == 2
-                                    val rookFromPos = if (isCastling) {
-                                        val rookFile = if (toPosition.first > fromPosition.first) 7 else 0
-                                        Pair(rookFile, fromPosition.second)
-                                    } else null
-                                    val rookToPos = if (isCastling) {
-                                        val rookFile = if (toPosition.first > fromPosition.first) 
-                                                        fromPosition.first + 1 else fromPosition.first - 1
-                                        Pair(rookFile, fromPosition.second)
-                                    } else null
+                                    val fromPosition = piece.position
+                                    val toPosition = Pair(newFile, newRank)
                                     
-                                    val isPromotion = piece.type == 'P' && 
-                                                    (toPosition.second == 7 && piece.isWhite || 
-                                                     toPosition.second == 0 && !piece.isWhite)
-                                    
-                                    if (isPromotion) {
-                                        pendingPromotion = Triple(fromPosition, toPosition, piece)
-                                        showPromotionDialog = true
-                                    } else {
-                                        val updatedPieces = pieces.map { p ->
-                                            when {
-                                                p == piece -> p.copy(position = toPosition)
-                                                p.position == toPosition -> p.copy(position = Pair(-1, -1))
-                                                p.position == capturedPawnPos -> p.copy(position = Pair(-1, -1))
-                                                p.position == rookFromPos -> p.copy(position = rookToPos!!)
-                                                else -> p
+                                    // En mode libre, on place toujours la pièce si elle est sur le plateau
+                                    // Sauf si on essaie de la poser sur sa propre case (pas de changement)
+                                    if (fromPosition != toPosition) {
+                                        val isTargetOccupiedBySameColor = pieces.any { it.position == toPosition && it.isWhite == piece.isWhite }
+                                        if (freeMove && !isTargetOccupiedBySameColor) {
+                                            // Placer la pièce, en supprimant celle qui est éventuellement sur la case cible
+                                            val updatedPieces = pieces.filterNot { it.position == toPosition || it == piece } + piece.copy(position = toPosition)
+                                            pieces = updatedPieces
+                                            val updatedGameState = gameState // L'état du jeu ne change pas vraiment en mode setup
+                                            val newFen = generateFEN(updatedPieces, isWhiteTurn, updatedGameState)
+                                            onMove?.invoke(newFen)
+                                        } else if (!freeMove && possibleMoves.contains(toPosition)) {
+                                            // Logique de jeu normale (déjà existante)
+                                            // ... (code pour enPassant, castling, promotion, etc.) ...
+                                            // ... (mise à jour de pieces et appel à onMove(newFen)) ...
+                                            val isEnPassant = piece.type == 'P' && 
+                                                            toPosition == gameState.enPassantTarget &&
+                                                            fromPosition.first != toPosition.first
+                                            
+                                            val capturedPawnPos = if (isEnPassant) {
+                                                Pair(toPosition.first, fromPosition.second)
+                                            } else null
+                                            
+                                            val isCastling = piece.type == 'K' && Math.abs(toPosition.first - fromPosition.first) == 2
+                                            val rookFromPos = if (isCastling) {
+                                                val rookFile = if (toPosition.first > fromPosition.first) 7 else 0
+                                                Pair(rookFile, fromPosition.second)
+                                            } else null
+                                            val rookToPos = if (isCastling) {
+                                                val rookFile = if (toPosition.first > fromPosition.first) 
+                                                                fromPosition.first + 1 else fromPosition.first - 1
+                                                Pair(rookFile, fromPosition.second)
+                                            } else null
+                                            
+                                            val isPromotion = piece.type == 'P' && 
+                                                            (toPosition.second == 7 && piece.isWhite || 
+                                                             toPosition.second == 0 && !piece.isWhite)
+                                            
+                                            if (isPromotion) {
+                                                pendingPromotion = Triple(fromPosition, toPosition, piece)
+                                                showPromotionDialog = true
+                                            } else {
+                                                val updatedPieces = pieces.map { p ->
+                                                    when {
+                                                        p == piece -> p.copy(position = toPosition)
+                                                        p.position == toPosition -> p.copy(position = Pair(-1, -1))
+                                                        p.position == capturedPawnPos -> p.copy(position = Pair(-1, -1))
+                                                        p.position == rookFromPos -> p.copy(position = rookToPos!!)
+                                                        else -> p
+                                                    }
+                                                }.filter { it.position.first >= 0 }
+                                                
+                                                pieces = updatedPieces
+                                                
+                                                val updatedGameState = gameState.afterMove(fromPosition, toPosition, piece, updatedPieces)
+                                                val newFen = generateFEN(updatedPieces, !isWhiteTurn, updatedGameState)
+                                                onMove?.invoke(newFen)
                                             }
-                                        }.filter { it.position.first >= 0 }
-                                        
-                                        pieces = updatedPieces
-                                        
-                                        val updatedGameState = gameState.afterMove(fromPosition, toPosition, piece, updatedPieces)
-                                        val newFen = generateFEN(updatedPieces, !isWhiteTurn, updatedGameState)
-                                        onMove?.invoke(newFen)
+                                        }
                                     }
                                 }
                             }
+                            // Réinitialisation de l'état du drag
                             selectedPiece = null
                             dragOffset = Offset.Zero
                             startDragPosition = Offset.Zero
@@ -266,7 +295,7 @@ fun PromotionDialog(
                 promotionPieces.forEach { pieceType ->
                     Button(
                         onClick = { onPieceSelected(pieceType) },
-                        modifier = Modifier.padding(4.dp)
+                        modifier = Modifier.padding(2.dp)
                     ) {
                         Text(
                             text = when (pieceType) {
