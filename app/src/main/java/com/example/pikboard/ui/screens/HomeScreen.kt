@@ -105,7 +105,7 @@ fun HomeScreen(
                 verticalArrangement = Arrangement.spacedBy(16.dp),
             ) {
                 items(games) { game ->
-                    Tile(name = game.user.username, fem = game.board, onClick = {
+                    Tile(name = game.opponent.username, fem = game.board, onClick = {
                         sharedViewModel.setCurrentFenP(game.board)
                         navController.navigate(Routes.Game.CHESS)
                     })
