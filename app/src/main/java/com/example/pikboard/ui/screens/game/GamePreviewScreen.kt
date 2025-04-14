@@ -1,6 +1,5 @@
 package com.example.pikboard.ui.screens.game
 
-import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -10,12 +9,8 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -31,7 +26,6 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -53,20 +47,15 @@ import com.example.pikboard.ui.Fragment.PikButton
 import com.example.pikboard.ui.Fragment.PikHeader
 import com.example.pikboard.ui.screens.Routes
 import androidx.compose.ui.unit.IntSize
-import androidx.compose.runtime.rememberCoroutineScope
-import kotlinx.coroutines.launch
-import androidx.compose.ui.unit.IntOffset
-import kotlin.math.roundToInt
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import android.widget.Toast
-import androidx.compose.foundation.layout.heightIn
 import com.example.pikboard.chess.ChessRules
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.background
 import androidx.compose.foundation.shape.CircleShape
+import com.example.pikboard.api.databaseFirebase.ChessGame
+import com.example.pikboard.api.databaseFirebase.ChessGameViewModel
 
 @Composable
 fun GamePreviewScreen(
@@ -207,25 +196,22 @@ fun GamePreviewScreen(
                 val currentPieces = parseFEN(fen)
                 val currentGameState = ChessGameState.fromFEN(fen)
 
-                // Validation 1: Vérifier les rois
                 val whiteKings = currentPieces.count { it.type == 'K' && it.isWhite }
                 val blackKings = currentPieces.count { it.type == 'K' && !it.isWhite }
 
                 if (whiteKings != 1 || blackKings != 1) {
                     Toast.makeText(context, "Error: There must be exactly one king of each color.", Toast.LENGTH_LONG).show()
-                    return@PikButton // Arrêter l'action
+                    return@PikButton
                 }
 
-                // Validation 2: Vérifier l'échec et mat (pour les deux couleurs)
                 val isWhiteMated = ChessRules.isCheckmate(currentPieces, true, currentGameState)
                 val isBlackMated = ChessRules.isCheckmate(currentPieces, false, currentGameState)
 
                 if (isWhiteMated || isBlackMated) {
                     Toast.makeText(context, "Error: The position is already in checkmate.", Toast.LENGTH_LONG).show()
-                    return@PikButton // Arrêter l'action
+                    return@PikButton
                 }
 
-                // Si tout est valide, continuer
                 sharedViewModel.setCurrentFenP(fen)
                 navController.navigate(Routes.Game.FRIEND)
             }
@@ -242,7 +228,11 @@ fun GamePreviewScreen(
 @Preview(showBackground = true)
 @Composable
 fun GamePreviewScreenPreview() {
-    GamePreviewScreen(rememberNavController(), viewModel(), PikBoardApiViewModel())
+    GamePreviewScreen(
+        rememberNavController(),
+        viewModel(),
+        PikBoardApiViewModel(),
+    )
 }
 
 @Composable

@@ -1,6 +1,5 @@
 package com.example.pikboard.ui.screens.game
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -9,8 +8,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -34,11 +31,11 @@ import androidx.navigation.compose.rememberNavController
 import com.example.pikboard.api.NetworkResponse
 import com.example.pikboard.api.PikBoardApiViewModel
 import com.example.pikboard.api.UserApi
+import com.example.pikboard.api.databaseFirebase.ChessGame
+import com.example.pikboard.api.databaseFirebase.ChessGameViewModel
 import com.example.pikboard.store.SharedImageViewModel
 import com.example.pikboard.store.readSessionToken
 import com.example.pikboard.ui.Fragment.PikHeader
-import com.example.pikboard.ui.Fragment.PikTextField
-import com.example.pikboard.ui.screens.FriendRequestTile
 import com.example.pikboard.ui.screens.Routes
 import com.example.pikboard.ui.screens.SearchResultTile
 
@@ -46,7 +43,8 @@ import com.example.pikboard.ui.screens.SearchResultTile
 fun GameFriendSreen(
     navController: NavHostController,
     sharedViewModel: SharedImageViewModel,
-    pikBoardApiViewModel: PikBoardApiViewModel
+    pikBoardApiViewModel: PikBoardApiViewModel,
+    firebaseViewModel: ChessGameViewModel
 ) {
 
     val friendsResponse by pikBoardApiViewModel.friendsResponse.observeAsState()
@@ -93,8 +91,16 @@ fun GameFriendSreen(
         NetworkResponse.Loading -> {
             isLoading = true
         }
-        is NetworkResponse.Success<*> -> {
+        is NetworkResponse.Success -> {
             isLoading = false
+            firebaseViewModel.createGameWithId(
+                ChessGame(
+                    id = result.data.data.id,
+                    board = sharedViewModel.pcurrentFen
+                )
+            )
+            sharedViewModel.setCurrentGameID(result.data.data.id)
+            sharedViewModel.updateGameWhitePlayer(result.data.data.white_player_id)
             navController.navigate(Routes.Game.CHESS)
             pikBoardApiViewModel.resetCreateGameResponse()
         }
@@ -141,8 +147,10 @@ fun GameFriendSreen(
                             pikBoardApiViewModel.createGame(
                                 token ,
                                 sharedViewModel.pcurrentFen,
+                                user.id,
                                 user.id
                             )
+
     //                        navController.navigate(Routes.Game.CHESS)
                         }
                     )
@@ -157,5 +165,5 @@ fun GameFriendSreen(
 @Preview(showBackground = true)
 @Composable
 fun GameFriendScreenPreview() {
-    GameFriendSreen(rememberNavController(), viewModel(), viewModel())
+    GameFriendSreen(rememberNavController(), viewModel(), viewModel(), viewModel())
 }

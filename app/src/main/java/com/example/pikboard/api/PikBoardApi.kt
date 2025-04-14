@@ -49,6 +49,10 @@ data class PendingGamesResponse(
     val `data`: List<CurrentGame>
 )
 
+data class CreatingGameResponse(
+    val `data`: NewGame
+)
+
 data class FemResponse(
     val `data`: String
 )
@@ -59,6 +63,11 @@ data class CurrentGameResponse(
 
 data class EndedGameResponse(
     val `data`: List<CurrentGame>
+)
+
+data class NewGame(
+    val id: Int,
+    val white_player_id: Int
 )
 
 data class CurrentGame(
@@ -90,6 +99,12 @@ data class UpdatePassword(
 data class CreateGameRequest (
     val fen: String,
     val opponent_id: Int,
+    val white_player_id: Int,
+)
+
+data class EndGameRequest (
+    val game_id: Int,
+    val winner_id: Int
 )
 
 data class SignupRequest(
@@ -213,6 +228,12 @@ interface PikBoardApi {
         @Header("Authorization") token: String,
     ): Response<EndedGameResponse>
 
+    @POST("game/end")
+    suspend fun endGames(
+        @Header("Authorization") token: String,
+        @Body() request: EndGameRequest
+    ): Response<Unit>
+
     @GET("game/request")
     suspend fun pendingGames(
         @Header("Authorization") token: String
@@ -223,5 +244,5 @@ interface PikBoardApi {
     suspend fun createGame(
         @Header("Authorization") token: String,
         @Body() request: CreateGameRequest
-    ): Response<Unit>
+    ): Response<CreatingGameResponse>
 }

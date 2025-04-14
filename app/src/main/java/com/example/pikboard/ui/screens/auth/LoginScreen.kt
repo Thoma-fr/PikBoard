@@ -46,8 +46,8 @@ fun LoginScreen(navController: NavHostController, viewModel: PikBoardApiViewMode
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
 
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("zk1569@mail.com") }
+    var password by remember { mutableStateOf("password123") }
 
     var emailError by remember { mutableStateOf("") }
     var passwordError by remember { mutableStateOf("") }
