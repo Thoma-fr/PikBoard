@@ -15,6 +15,15 @@ class SharedImageViewModel : ViewModel() {
     var currentOpponentChess by mutableStateOf<UserApi?>(null)
         private set
 
+    var currentGameID by mutableStateOf<Int?>(null)
+        private set
+
+    var currentGameWhitePlayer by mutableStateOf<Int?>(null)
+        private set
+
+    var userID by mutableStateOf<Int?>(null)
+        private set
+
     fun setImageBitmap(bitmap: Bitmap) {
         selectedImageBitmap = bitmap
     }
@@ -25,5 +34,17 @@ class SharedImageViewModel : ViewModel() {
 
     fun setCurrentOpponent(opponent: UserApi?) {
         currentOpponentChess = opponent
+    }
+
+    fun setCurrentGameID(gameID: Int) {
+        currentGameID = gameID
+    }
+
+    fun updateGameWhitePlayer(whiteID: Int?) {
+        currentGameWhitePlayer = whiteID
+    }
+
+    fun updateUserID(id: Int?) {
+        userID = id
     }
 }

@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
@@ -31,6 +32,7 @@ import com.example.pikboard.ui.screens.auth.SignupScreen
 import com.example.pikboard.ui.theme.PikBoardTheme
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.pikboard.api.databaseFirebase.ChessGameViewModel
 import com.example.pikboard.store.SharedImageViewModel
 import com.example.pikboard.ui.screens.EditProfileScreen
 import com.example.pikboard.ui.screens.game.GameFriendSreen
@@ -56,6 +58,7 @@ class MainActivity : ComponentActivity() {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route
         val sharedViewModel: SharedImageViewModel = viewModel()
+        val firebaseViewModel by viewModels<ChessGameViewModel>()
 
 
         Scaffold(
@@ -95,13 +98,13 @@ class MainActivity : ComponentActivity() {
                     AddGamePage(navController, sharedViewModel)
                 }
                 composable(Routes.Game.CHESS){
-                    GameScreen(navController, sharedViewModel)
+                    GameScreen(navController, sharedViewModel,pikBoardApiViewModel, firebaseViewModel)
                 }
                 composable(Routes.Game.PREVIEW) {
                     GamePreviewScreen(navController, sharedViewModel, pikBoardApiViewModel)
                 }
                 composable(Routes.Game.FRIEND) {
-                    GameFriendSreen(navController, sharedViewModel, pikBoardApiViewModel)
+                    GameFriendSreen(navController, sharedViewModel, pikBoardApiViewModel, firebaseViewModel)
                 }
                 composable(Routes.EDIT_PROFILE) {
                     EditProfileScreen(navController, sharedViewModel, pikBoardApiViewModel)

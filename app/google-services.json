@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "959760572626",
+    "project_id": "pikboard-28b16",
+    "storage_bucket": "pikboard-28b16.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:959760572626:android:0220695ed98dc17797cd0b",
+        "android_client_info": {
+          "package_name": "com.example.pikboard"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBLgFrY8HG1khe90FfW8Wws12bj_0CZR1M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

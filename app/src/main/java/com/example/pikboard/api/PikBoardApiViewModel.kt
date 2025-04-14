@@ -29,7 +29,8 @@ class PikBoardApiViewModel: ViewModel(){
     val currentGamesResponse = MutableLiveData<NetworkResponse<CurrentGameResponse>>()
     val penddingGamesResponse = MutableLiveData<NetworkResponse<PendingGamesResponse>>()
     val endedGamesResponse = MutableLiveData<NetworkResponse<EndedGameResponse>>()
-    var createGameResponse = MutableLiveData<NetworkResponse<Unit>?>()
+    val endGameResponse = MutableLiveData<NetworkResponse<Unit>?>()
+    var createGameResponse = MutableLiveData<NetworkResponse<CreatingGameResponse>?>()
     var updatePasswordResponse = MutableLiveData<NetworkResponse<Unit>?>()
 
     fun login(email:String, password: String) {
@@ -337,7 +338,7 @@ class PikBoardApiViewModel: ViewModel(){
         viewModelScope.launch {
             try {
                 val bearerToken = "Bearer $token"
-                val response = pikBoardApi.endedGames(bearerToken)
+                val response = pikBoardApi.endedGames(bearerToken )
                 if (response.isSuccessful) {
                     response.body()?.let {
                         endedGamesResponse.value = NetworkResponse.Success(it)
@@ -351,15 +352,34 @@ class PikBoardApiViewModel: ViewModel(){
         }
     }
 
-    fun createGame(token: String, fen: String, opponentID: Int) {
+    fun endGames(token: String, winnerID: Int, gameID: Int) {
+        endGameResponse.value = NetworkResponse.Loading
+        viewModelScope.launch {
+            try {
+                val bearerToken = "Bearer $token"
+                val response = pikBoardApi.endGames(bearerToken, EndGameRequest(gameID, winnerID))
+                if (response.isSuccessful) {
+                    response.body()?.let {
+                        endGameResponse.value = NetworkResponse.Success(Unit)
+                    }
+                } else {
+                    endGameResponse.value = NetworkResponse.Error("Server error")
+                }
+            } catch (e: Exception) {
+                endGameResponse.value = NetworkResponse.Error("Read crash")
+            }
+        }
+    }
+
+    fun createGame(token: String, fen: String, opponentID: Int, whitePlayer: Int) {
         createGameResponse.value = NetworkResponse.Loading
         viewModelScope.launch {
             try {
                 val bearerToken = "Bearer $token"
-                val response = pikBoardApi.createGame(bearerToken, CreateGameRequest(fen, opponentID))
+                val response = pikBoardApi.createGame(bearerToken, CreateGameRequest(fen, opponentID, whitePlayer))
                 if (response.isSuccessful) {
                     response.body()?.let {
-                        createGameResponse.value = NetworkResponse.Success(Unit)
+                        createGameResponse.value = NetworkResponse.Success(it)
                     }
                 } else {
                     createGameResponse.value = NetworkResponse.Error("Server error")

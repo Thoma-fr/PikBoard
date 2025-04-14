@@ -60,6 +60,7 @@ fun HomeScreen(
         LaunchedEffect (token) {
             if (token is String && (token as String).isNotEmpty() && apiCallMade == false) {
                 pikBoardApiViewModel.currentGame(token as String)
+                pikBoardApiViewModel.getUserFromSessionToken(token as String)
                 apiCallMade = true
             }
         }
@@ -77,6 +78,20 @@ fun HomeScreen(
             is NetworkResponse.Success -> {
                 games = result.data.data
                 isLoading = false
+            }
+            null -> {}
+        }
+
+        val loginResult = pikBoardApiViewModel.userFromSessionTokenResponse.observeAsState()
+
+        when(val result = loginResult.value) {
+            is NetworkResponse.Error -> {
+                errorApiMessage = result.message
+            }
+            NetworkResponse.Loading -> {
+            }
+            is NetworkResponse.Success -> {
+                sharedViewModel.updateUserID(result.data.data.id)
             }
             null -> {}
         }
@@ -107,6 +122,8 @@ fun HomeScreen(
                 items(games) { game ->
                     Tile(name = game.opponent.username, fem = game.board, onClick = {
                         sharedViewModel.setCurrentFenP(game.board)
+                        sharedViewModel.setCurrentGameID(game.id)
+                        sharedViewModel.updateGameWhitePlayer(game.white_player_id)
                         navController.navigate(Routes.Game.CHESS)
                     })
                 }
