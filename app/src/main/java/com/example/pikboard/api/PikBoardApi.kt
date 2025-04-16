@@ -102,6 +102,11 @@ data class CreateGameRequest (
     val white_player_id: Int,
 )
 
+data class UpdateGameRequest (
+    val game_id: Int,
+    val board: String
+)
+
 data class EndGameRequest (
     val game_id: Int,
     val winner_id: Int
@@ -245,4 +250,10 @@ interface PikBoardApi {
         @Header("Authorization") token: String,
         @Body() request: CreateGameRequest
     ): Response<CreatingGameResponse>
+
+    @PUT("game/move")
+    suspend fun updateGame(
+        @Header("Authorization") token: String,
+        @Body() request: UpdateGameRequest
+    ): Response<Unit>
 }

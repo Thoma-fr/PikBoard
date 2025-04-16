@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -25,6 +26,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -45,6 +50,29 @@ fun GameScreen(
     pikBoardApiViewModel: PikBoardApiViewModel,
     firebaseViewModel: ChessGameViewModel
 ) {
+    val lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current
+
+    val context = LocalContext.current
+    val token by readSessionToken(context).collectAsState(initial = "")
+
+    val game = firebaseViewModel.game.value
+    var fenPosition = game?.board ?: sharedViewModel.pcurrentFen
+    var gameID = sharedViewModel.currentGameID
+
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_STOP) {
+                val id = game?.id
+                if (id != null) {
+                    pikBoardApiViewModel.updateGame(token as String, id, fenPosition)
+                }
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
+        }
+    }
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier
@@ -52,12 +80,7 @@ fun GameScreen(
                 .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            val context = LocalContext.current
-            val token by readSessionToken(context).collectAsState(initial = "")
 
-            val game = firebaseViewModel.game.value
-            var fenPosition = game?.board ?: sharedViewModel.pcurrentFen
-            var gameID = sharedViewModel.currentGameID
 
             val playerIsWhite = sharedViewModel.currentGameWhitePlayer == sharedViewModel.userID
             val isWhiteTurn = fenPosition.split(" ")[1] == "w"
