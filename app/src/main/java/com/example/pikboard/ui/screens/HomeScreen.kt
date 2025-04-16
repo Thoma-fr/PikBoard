@@ -31,6 +31,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.pikboard.api.CurrentGame
 import com.example.pikboard.api.NetworkResponse
 import com.example.pikboard.api.PikBoardApiViewModel
+import com.example.pikboard.api.UserApi
 import com.example.pikboard.store.SharedImageViewModel
 import com.example.pikboard.store.readSessionToken
 import com.example.pikboard.ui.Fragment.PikButton
@@ -56,6 +57,7 @@ fun HomeScreen(
         var apiCallMade by remember { mutableStateOf(false) }
         var errorApiMessage by remember { mutableStateOf("") }
         var isLoading by remember{ mutableStateOf(false) }
+        var user by remember{ mutableStateOf<UserApi?>(null) }
 
         LaunchedEffect (token) {
             if (token is String && (token as String).isNotEmpty() && apiCallMade == false) {
@@ -91,6 +93,7 @@ fun HomeScreen(
             NetworkResponse.Loading -> {
             }
             is NetworkResponse.Success -> {
+                user = result.data.data
                 sharedViewModel.updateUserID(result.data.data.id)
             }
             null -> {}
@@ -120,7 +123,13 @@ fun HomeScreen(
                 verticalArrangement = Arrangement.spacedBy(16.dp),
             ) {
                 items(games) { game ->
-                    Tile(name = game.opponent.username, fem = game.board, onClick = {
+                    var opponent = ""
+                    if (user?.username == game.opponent.username) {
+                        opponent = game.user.username
+                    } else {
+                        opponent = game.opponent.username
+                    }
+                    Tile(name = opponent, fem = game.board, onClick = {
                         sharedViewModel.setCurrentFenP(game.board)
                         sharedViewModel.setCurrentGameID(game.id)
                         sharedViewModel.updateGameWhitePlayer(game.white_player_id)
