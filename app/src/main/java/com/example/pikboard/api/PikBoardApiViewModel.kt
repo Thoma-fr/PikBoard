@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
+import org.json.JSONObject
 import retrofit2.http.Multipart
 
 class PikBoardApiViewModel: ViewModel(){
@@ -62,8 +63,13 @@ class PikBoardApiViewModel: ViewModel(){
                 } else {
                     val errorMessage = when (response.code()) {
                         400 -> "Username or Email are not valid"
-                        409 -> "User already exist"
-                        else -> "Server error"
+                        409 -> {
+                            val errorJson = response.errorBody()?.string()
+                            errorJson
+                                ?.let { JSONObject(it).optString("error") }
+                                .takeUnless { it.isNullOrBlank() }
+                                ?: "User already exists"
+                        }                        else -> "Server error"
                     }
                     signupResponse.value = NetworkResponse.Error(errorMessage)                }
             } catch (e: Exception) {
