@@ -48,6 +48,9 @@ fun SignupScreen(navController: NavHostController, pikBoardApiViewModel: PikBoar
 
     var passwordError by remember { mutableStateOf("") }
     var apiErrorMessage by remember { mutableStateOf("") }
+    var userNameError by remember { mutableStateOf(false) }
+    var emailError by remember { mutableStateOf(false) }
+    var isPasswordError by remember { mutableStateOf(false) }
     var isSignupApiCallLoading by remember { mutableStateOf(false) }
 
     val signupResult = pikBoardApiViewModel.signupResponse.observeAsState()
@@ -56,6 +59,16 @@ fun SignupScreen(navController: NavHostController, pikBoardApiViewModel: PikBoar
     when(val result = signupResult.value) {
         is NetworkResponse.Error -> {
             apiErrorMessage = result.message
+            if (apiErrorMessage == "User already exists"){
+                userNameError = true
+                emailError = false
+            } else if (apiErrorMessage == "Email already exists") {
+                emailError = true
+                userNameError = false
+            } else {
+                userNameError = false
+                emailError = false
+            }
             isSignupApiCallLoading = false
         }
         NetworkResponse.Loading -> {
@@ -104,6 +117,7 @@ fun SignupScreen(navController: NavHostController, pikBoardApiViewModel: PikBoar
             value = username,
             onValueChange = {username = it},
             hint = "Username",
+            color = if (userNameError) Color.Red else Color.Unspecified,
             leadingIcon = Icons.Rounded.AccountCircle
         )
 
@@ -113,6 +127,7 @@ fun SignupScreen(navController: NavHostController, pikBoardApiViewModel: PikBoar
             value = email,
             onValueChange = {email = it},
             hint = "Email",
+            color = if (emailError) Color.Red else Color.Unspecified,
             leadingIcon = Icons.Rounded.Email
         )
 
@@ -122,7 +137,7 @@ fun SignupScreen(navController: NavHostController, pikBoardApiViewModel: PikBoar
             value = password,
             onValueChange = {password = it},
             hint = passwordError.ifEmpty { "Password" },
-            color = if (passwordError.isNotEmpty()) Color.Red else Color.Unspecified,
+            color = if (passwordError.isNotEmpty() || isPasswordError) Color.Red else Color.Unspecified,
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -130,6 +145,7 @@ fun SignupScreen(navController: NavHostController, pikBoardApiViewModel: PikBoar
         PikPasswordField(
             value = confPassword,
             onValueChange = {confPassword = it},
+            color = if (isPasswordError) Color.Red else Color.Unspecified,
             hint = "Confirm password"
         )
 
@@ -146,10 +162,15 @@ fun SignupScreen(navController: NavHostController, pikBoardApiViewModel: PikBoar
                 password.isNotEmpty() &&
                 confPassword.isNotEmpty()
             ) {
-                if (confPassword == password) {
+                isPasswordError = false
+                if (password.length < 8) {
+                    apiErrorMessage = "Password too short"
+                    isPasswordError = true
+                } else if (confPassword == password) {
                     pikBoardApiViewModel.signup(username, email, password)
                 } else {
                     apiErrorMessage = "Passwords are different"
+                    isPasswordError = true
                 }
             }
         }
