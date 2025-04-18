@@ -39,6 +39,7 @@ import com.example.pikboard.store.SharedImageViewModel
 import com.example.pikboard.ui.Fragment.PikBigButton
 import com.example.pikboard.ui.Fragment.PikButton
 import com.example.pikboard.ui.Fragment.PikHeader
+import com.example.pikboard.ui.Fragment.PikMedButton
 import com.example.pikboard.ui.screens.Routes
 import kotlin.contracts.contract
 
@@ -94,16 +95,16 @@ fun AddGamePage( navController: NavController, sharedViewModel: SharedImageViewM
 
         Text(text="New Game",fontSize = 50.sp,fontWeight = FontWeight.Bold)
         Spacer(modifier = Modifier.height(20.dp))
-        PikBigButton(text="From Scratch") {
+        PikMedButton(text="Create a new game") {
             sharedViewModel.setCurrentFenP("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w - - 0 1")
             navController.navigate(Routes.Game.PREVIEW)
         }
         Spacer(modifier = Modifier.height(18.dp))
-        PikBigButton(text="From camera") {
+        PikMedButton(text="From the camera") {
             camPermission.launch(android.Manifest.permission.CAMERA)
         }
         Spacer(modifier = Modifier.height(18.dp))
-        PikBigButton(text="From gallery") {
+        PikMedButton(text="Load from my gallery") {
             photoPermission.launch(android.Manifest.permission.READ_EXTERNAL_STORAGE)
         }
 

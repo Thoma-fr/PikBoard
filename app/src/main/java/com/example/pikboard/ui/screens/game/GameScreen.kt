@@ -42,6 +42,7 @@ import com.example.pikboard.chess.ChessRules
 import com.example.pikboard.chess.parseFEN
 import com.example.pikboard.store.SharedImageViewModel
 import com.example.pikboard.store.readSessionToken
+import com.example.pikboard.ui.Fragment.PikHeader
 
 @Composable
 fun GameScreen(
@@ -50,6 +51,7 @@ fun GameScreen(
     pikBoardApiViewModel: PikBoardApiViewModel,
     firebaseViewModel: ChessGameViewModel
 ) {
+    PikHeader()
     val lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current
 
     val context = LocalContext.current
