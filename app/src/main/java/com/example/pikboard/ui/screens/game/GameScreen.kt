@@ -5,7 +5,9 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -42,6 +44,7 @@ import com.example.pikboard.chess.ChessRules
 import com.example.pikboard.chess.parseFEN
 import com.example.pikboard.store.SharedImageViewModel
 import com.example.pikboard.store.readSessionToken
+import com.example.pikboard.ui.Fragment.PikButton
 import com.example.pikboard.ui.Fragment.PikHeader
 
 @Composable
@@ -52,6 +55,7 @@ fun GameScreen(
     firebaseViewModel: ChessGameViewModel
 ) {
     PikHeader()
+
     val lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current
 
     val context = LocalContext.current
@@ -75,6 +79,7 @@ fun GameScreen(
             lifecycleOwner.lifecycle.removeObserver(observer)
         }
     }
+
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier
@@ -102,6 +107,7 @@ fun GameScreen(
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                Spacer(modifier = Modifier.height(80.dp))
                 Text(
                     text = "Tour: ${if (isWhiteTurn) "Blancs" else "Noirs"} | Vous: ${if (playerIsWhite) "Blancs" else "Noirs"} ${game?.id}",
                     fontWeight = FontWeight.Bold,
@@ -145,18 +151,14 @@ fun GameScreen(
                     },
                     modifier = Modifier.padding(16.dp)
                 )
+                Column {
+                    PikButton(text="Draw") {  }
+                    PikButton(text="Surrender") {  }
+                }
             }
         }
-        Image(
-            painter = painterResource(id = R.drawable.surrender),
-            contentDescription = "Logo Giveup",
-            modifier = Modifier
-                .align(Alignment.BottomStart)
-                .padding(16.dp)
-                .offset(y = (-200).dp).size(60.dp)
-                .clickable {
-                }
-        )
+
+
     }
 }
 @Preview(showBackground = true)
